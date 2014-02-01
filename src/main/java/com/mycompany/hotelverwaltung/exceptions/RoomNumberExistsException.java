@@ -7,7 +7,7 @@
 package com.mycompany.hotelverwaltung.exceptions;
 
 /**
- *
+ * Exception used to determine if Roomnumber already exists 
  * @author said
  */
 public class RoomNumberExistsException extends Exception {

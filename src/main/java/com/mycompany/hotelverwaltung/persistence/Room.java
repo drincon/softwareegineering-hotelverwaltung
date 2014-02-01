@@ -3,8 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package com.mycompany.hotelverwaltung;
+package com.mycompany.hotelverwaltung.persistence;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
@@ -13,29 +12,41 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
+ * Room is the entity that respresents an hotelroom in the persistence
  *
  * @author said
  */
 @Entity
 public class Room implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     private String name;
-    private int price;
     private int roomNumber;
 
-    public Room(){
-        
+    private RoomType roomType;
+
+    public Room() {
+
     }
-    
-    public Room(String name, int price, int roomNumber){
-        this.name=name;
-        this.price=price;
-        this.roomNumber=roomNumber;
+
+    public Room(String name, int roomNumber, RoomType roomType) {
+        this.name = name;
+        this.roomNumber = roomNumber;
+        this.roomType = roomType;
     }
+
+    public RoomType getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
+    }
+
     public int getRoomNumber() {
         return roomNumber;
     }
@@ -51,16 +62,6 @@ public class Room implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-    
-    
 
     public Long getId() {
         return id;
@@ -94,5 +95,5 @@ public class Room implements Serializable {
     public String toString() {
         return "com.mycompany.hotelverwaltung.Room[ id=" + id + " ]";
     }
-    
+
 }

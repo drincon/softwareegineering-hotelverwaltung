@@ -3,19 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.hotelverwaltung;
+package com.mycompany.hotelverwaltung.persistence;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
 
 /**
- *
+ * Customer entity. represents one customer in the persitence
  * @author said
  */
 @Entity
@@ -34,7 +36,8 @@ public class Customer implements Serializable {
     private String zipcode;
     private String city;
     private String country;
-    private String birthday;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Calendar birthday;
 
     @OneToMany(mappedBy = "customer")
     private Collection<Reservation> reservations;
@@ -50,7 +53,18 @@ public class Customer implements Serializable {
         this.surname = surname;
     }
 
-    public Customer(String name, String surname, String adress, String streetnumber, String zipcode, String city, String country, String birthday) {
+    /**
+     * Constructor of a Customer entity
+     * @param name
+     * @param surname
+     * @param adress
+     * @param streetnumber
+     * @param zipcode
+     * @param city
+     * @param country
+     * @param birthday 
+     */
+    public Customer(String name, String surname, String adress, String streetnumber, String zipcode, String city, String country, Calendar birthday) {
         this.reservations = new ArrayList<Reservation>();
         this.name = name;
         this.surname = surname;
@@ -118,11 +132,11 @@ public class Customer implements Serializable {
         this.country = country;
     }
 
-    public String getBirthday() {
+    public Calendar getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(Calendar birthday) {
         this.birthday = birthday;
     }
 

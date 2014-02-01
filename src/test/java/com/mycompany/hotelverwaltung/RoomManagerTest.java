@@ -5,7 +5,16 @@
  */
 package com.mycompany.hotelverwaltung;
 
+import com.mycompany.hotelverwaltung.persistence.RoomManager;
+import com.mycompany.hotelverwaltung.persistence.Service;
+import com.mycompany.hotelverwaltung.persistence.Room;
+import com.mycompany.hotelverwaltung.persistence.Customer;
+import com.mycompany.hotelverwaltung.persistence.Reservation;
 import com.mycompany.hotelverwaltung.exceptions.RoomNumberExistsException;
+import com.mycompany.hotelverwaltung.persistence.RoomType;
+import static com.mycompany.hotelverwaltung.persistence.RoomType.DOUBLEROOM;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -26,6 +35,7 @@ public class RoomManagerTest extends TestCase {
     private Customer c;
     private Room r;
     private Service s;
+    private Reservation re;
 
     public RoomManagerTest(String testName) {
         super(testName);
@@ -41,11 +51,20 @@ public class RoomManagerTest extends TestCase {
         this.c = new Customer("max", "mustermann");
         persistObject(c);
 
-        this.r = new Room("TestRoom", 50, 1);
+        this.r = new Room("TestRoom", 1, RoomType.DOUBLEROOM);
         persistObject(r);
 
         this.s = new Service("Testdienstleistung", 50);
         persistObject(s);
+
+        Calendar arrival = Calendar.getInstance();
+        arrival.set(2000, Calendar.JANUARY, 16);
+        Calendar departure = Calendar.getInstance();
+        departure.set(2000, Calendar.JANUARY, 18);
+        List<Service> list = new ArrayList();
+        list.add(s);
+        this.re = new Reservation(1, c, r, arrival, departure, list);
+        persistObject(re);
 
     }
 
@@ -53,6 +72,8 @@ public class RoomManagerTest extends TestCase {
     protected void tearDown() throws Exception {
         super.tearDown();
         em.getTransaction().begin();
+        re.setCustomer(null);
+        em.remove(re);
         em.remove(c);
         em.remove(r);
         em.remove(s);
@@ -60,7 +81,140 @@ public class RoomManagerTest extends TestCase {
 
         rm.close();
 
+        printAll();
+
         em.close();
+
+    }
+
+    public void testCalculatePrice() throws Exception {
+        List<Service> list = new ArrayList();
+        list.add(s);
+        Double d = rm.calculatePrice(re.getArrival(), re.getDeparture(), DOUBLEROOM, list);
+        if (d != 250) {
+            throw new Exception();
+        }
+        /*
+         TODO: checken auf exception
+         */
+    }
+
+    public void testUpdateCustomer() throws Exception {
+        rm.updateCustomer(c.getId(), c.getName(), "Christian", c.getAdress(), c.getStreetnumber(), c.getZipcode(), c.getCity(), c.getCountry(), c.getBirthday());
+        Iterator<Customer> it = rm.getCustomerList().iterator();
+        boolean check = true;
+        while (it.hasNext()) {
+            Customer c2 = it.next();
+            if (c2.getSurname().equals("Christian")) {
+                check = false;
+            }
+        }
+        if (check) {
+            throw new Exception();
+        }
+    }
+
+    public void testDateIsInTimeframe() throws Exception {
+        Calendar checkInDate = Calendar.getInstance();
+        checkInDate.set(2000, Calendar.JULY, 10);
+        Calendar checkOutDate = Calendar.getInstance();
+        checkOutDate.set(2000, Calendar.JULY, 20);
+        Calendar checkDay = Calendar.getInstance();
+        checkDay.set(2000, Calendar.JULY, 22);
+        if (!rm.dateIsInTimeframe(checkInDate, checkOutDate, checkDay)) {
+            throw new Exception();
+        }
+        checkDay.set(2000, Calendar.JULY, 9);
+        if (!rm.dateIsInTimeframe(checkInDate, checkOutDate, checkDay)) {
+            throw new Exception();
+        }
+        checkDay.set(2000, Calendar.JULY, 15);
+        if (rm.dateIsInTimeframe(checkInDate, checkOutDate, checkDay)) {
+            throw new Exception();
+        }
+    }
+
+    public void testCheckAvailability() throws Exception {
+        Calendar checkInDate = Calendar.getInstance();
+        checkInDate.set(2000, Calendar.JULY, 10);
+        Calendar checkOutDate = Calendar.getInstance();
+        checkOutDate.set(2000, Calendar.JULY, 20);
+        List<Room> list = rm.checkAvailability(checkInDate, checkOutDate, DOUBLEROOM);
+        if (!list.contains(r)) {
+            throw new Exception();
+        }
+
+        try {
+            // TODO : checken ob alle cases funktionieren
+            checkInDate.set(2000, Calendar.JANUARY, 17);
+
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    public void testAddAndRemoveReservation() throws Exception {
+        Calendar arrival = Calendar.getInstance();
+        arrival.set(2000, Calendar.JANUARY, 10);
+        Calendar departure = Calendar.getInstance();
+        departure.set(2000, Calendar.JANUARY, 12);
+
+        Customer c2 = new Customer("christian", "mustermann");
+        persistObject(c2);
+
+        Room r2 = new Room("TestRoom 2", 1, RoomType.DOUBLEROOM);
+        persistObject(r2);
+
+        Service s2 = new Service("Testdienstleistung 2", 50);
+        persistObject(s2);
+
+        List<Service> list = new ArrayList();
+        list.add(s2);
+
+        rm.addReservation(1, c2, r2, arrival, departure, list);
+        Reservation tmp = null;
+        Iterator<Reservation> it = rm.getReservationList().iterator();
+        boolean check = false;
+        while (it.hasNext()) {
+            Reservation re2 = it.next();
+            if (re2.getReservationNumber() == 1 && re2.getCustomer().equals(c2) && re2.getArrival().equals(arrival) && re2.getDeparture().equals(departure) && re2.getRoom().equals(r2)) {
+                for (int x = 0; x < re2.getServices().size(); x++) {
+                    for (int y = 0; y < list.size(); y++) {
+                        if (re2.getServices().get(x).equals(list.get(y))) {
+                            check = true;
+                            tmp = re2;
+                        }
+                    }
+                }
+            }
+        }
+        if (!check) {
+            throw new Exception();
+        }
+
+        rm.removeReservation(tmp);
+
+        it = rm.getReservationList().iterator();
+        while (it.hasNext()) {
+            Reservation re2 = it.next();
+            if (re2.getReservationNumber() == 1 && re2.getCustomer().equals(c2) && re2.getArrival().equals(arrival) && re2.getDeparture().equals(departure) && re2.getRoom().equals(r2)) {
+                for (int x = 0; x < re2.getServices().size(); x++) {
+                    for (int y = 0; y < list.size(); y++) {
+                        if (re2.getServices().get(x).equals(list.get(y))) {
+                            check = true;
+                        }
+                    }
+                }
+            }
+        }
+        if (!check) {
+            throw new Exception();
+        }
+        rm.removeCustomer(c2);
+        rm.removeService(s2);
+
+        rm.removeRoom(r2);
 
     }
 
@@ -70,40 +224,40 @@ public class RoomManagerTest extends TestCase {
         Iterator<Service> it = rm.getServiceList().iterator();
         boolean check = false;
         while (it.hasNext()) {
-            Service s = it.next();
-            if (s.getName().equals("TestService") && s.getPrice() == 50) {
-                check=true;
-                tmp=s;
+            Service s2 = it.next();
+            if (s2.getName().equals("TestService") && s2.getPrice() == 50) {
+                check = true;
+                tmp = s2;
             }
         }
-        if(!check){
+        if (!check) {
             throw new Exception();
         }
         rm.removeService(tmp);
-        
-        it=rm.getServiceList().iterator();
+
+        it = rm.getServiceList().iterator();
         while (it.hasNext()) {
-            Service s = it.next();
-            if (s.getName().equals("TestService") && s.getPrice() == 50) {
-                check=false;
+            Service s2 = it.next();
+            if (s2.getName().equals("TestService") && s2.getPrice() == 50) {
+                check = false;
             }
         }
-        if(!check){
+        if (!check) {
             throw new Exception();
         }
 
     }
 
     public void testAddAndRemoveRoom() throws RoomNumberExistsException, Exception {
-        rm.addRoom("TestRoom2", 50, 2);
+        rm.addRoom("TestRoom2", 50, 2, RoomType.DOUBLEROOM);
         Room tmp = null;
         Iterator<Room> it = rm.getRoomList().iterator();
         boolean check = false;
         while (it.hasNext()) {
-            Room r = it.next();
-            if (r.getPrice() == 50 && r.getName().equals("TestRoom2") && r.getRoomNumber() == 2) {
+            Room r2 = it.next();
+            if (r2.getName().equals("TestRoom2") && r2.getRoomNumber() == 2) {
                 check = true;
-                tmp = r;
+                tmp = r2;
             }
         }
         if (!check) {
@@ -113,8 +267,8 @@ public class RoomManagerTest extends TestCase {
 
         it = rm.getRoomList().iterator();
         while (it.hasNext()) {
-            Room r = it.next();
-            if (r.getPrice() == 50 && r.getRoomNumber() == 2 && r.getName().equals("TestRoom2")) {
+            Room r2 = it.next();
+            if (r2.getRoomNumber() == 2 && r2.getName().equals("TestRoom2")) {
                 check = false;
             }
         }
@@ -125,15 +279,18 @@ public class RoomManagerTest extends TestCase {
     }
 
     public void testAddAndRemoveCustomer() throws Exception {
-        rm.addCustomer("Mustermann", "Max", "musterstraße", "7", "181648", "musterstadt", "Musterland", "1.1.1900");
+        Calendar cal = Calendar.getInstance();
+        cal.set(2009, Calendar.DECEMBER, 12);
+
+        rm.addCustomer("Mustermann", "Max", "musterstraße", "7", "181648", "musterstadt", "Musterland", cal);
         Customer tmp = null;
         Iterator<Customer> it = rm.getCustomerList().iterator();
         boolean check = false;
         while (it.hasNext()) {
-            Customer c = it.next();
-            if (c.getName().equals("Mustermann") && c.getSurname().equals("Max") && c.getAdress().equals("musterstraße") && c.getStreetnumber().equals("7") && c.getZipcode().equals("181648") && c.getCity().equals("musterstadt") && c.getCountry().equals("Musterland") && c.getBirthday().equals("1.1.1900")) {
+            Customer c2 = it.next();
+            if (c2.getName().equals("Mustermann") && c2.getSurname().equals("Max") && c2.getAdress().equals("musterstraße") && c2.getStreetnumber().equals("7") && c2.getZipcode().equals("181648") && c2.getCity().equals("musterstadt") && c2.getCountry().equals("Musterland") && c2.getBirthday().equals(cal)) {
                 check = true;
-                tmp = c;
+                tmp = c2;
             }
         }
         if (!check) {
@@ -143,8 +300,8 @@ public class RoomManagerTest extends TestCase {
 
         it = rm.getCustomerList().iterator();
         while (it.hasNext()) {
-            Customer c = it.next();
-            if (c.getName().equals("Mustermann") && c.getSurname().equals("Max") && c.getAdress().equals("musterstraße") && c.getStreetnumber().equals("7") && c.getZipcode().equals("181648") && c.getCity().equals("musterstadt") && c.getCountry().equals("Musterland") && c.getBirthday().equals("1.1.1900")) {
+            Customer c2 = it.next();
+            if (c2.getName().equals("Mustermann") && c2.getSurname().equals("Max") && c2.getAdress().equals("musterstraße") && c2.getStreetnumber().equals("7") && c2.getZipcode().equals("181648") && c2.getCity().equals("musterstadt") && c2.getCountry().equals("Musterland") && c2.getBirthday().equals(cal)) {
                 check = false;
             }
         }
@@ -171,17 +328,18 @@ public class RoomManagerTest extends TestCase {
     }
 
     public void testRoomManager() {
-        RoomManager rm = new RoomManager();
-        rm.close();
+        RoomManager rm2 = new RoomManager();
+        rm2.close();
     }
 
-    public void testgetServuceList() throws Exception{
-        List<Service> list= rm.getServiceList();
+    public void testgetServuceList() throws Exception {
+        List<Service> list = rm.getServiceList();
         List<Service> list2 = em.createQuery("Select s from Service s").getResultList();
-        if(!list.equals(list2)){
+        if (!list.equals(list2)) {
             throw new Exception();
         }
     }
+
     private void persistObject(Object o) {
         em.getTransaction().begin();
         em.persist(o);
@@ -194,29 +352,29 @@ public class RoomManagerTest extends TestCase {
         List<Room> list = q.getResultList();
         Iterator<Room> it = list.iterator();
         while (it.hasNext()) {
-            Room r = it.next();
-            System.out.println("-Room-------------------------------------" + r.getName() + "----------------------------");
+            Room r2 = it.next();
+            System.out.println("-Room-------------------------------------" + r2.getName() + " | " + r2.getId() + "----------------------------");
         }
         q = em.createQuery("Select c from Customer c");
         List<Customer> list2 = q.getResultList();
         Iterator<Customer> it2 = list2.iterator();
         while (it2.hasNext()) {
-            Customer c = it2.next();
-            System.out.println("-Customer-------------------------------------" + c.getName() + " " + c.getSurname() + "----------------------------");
+            Customer c2 = it2.next();
+            System.out.println("-Customer-------------------------------------" + c2.getName() + " " + c2.getSurname() + " " + r.getId() + "----------------------------");
         }
         q = em.createQuery("Select s from Service s");
         List<Service> list3 = q.getResultList();
         Iterator<Service> it3 = list3.iterator();
         while (it3.hasNext()) {
-            Service s = it3.next();
-            System.out.println("-Service-------------------------------------" + s.getName() + "----------------------------");
+            Service s2 = it3.next();
+            System.out.println("-Service-------------------------------------" + s2.getName() + " " + r.getId() + "----------------------------");
         }
         q = em.createQuery("Select r from Reservation r");
         List<Reservation> list4 = q.getResultList();
         Iterator<Reservation> it4 = list4.iterator();
         while (it4.hasNext()) {
-            Reservation r = it4.next();
-            System.out.println("-Reservation---------------------------------" + r.getReservationNumber() + " " + r.getCustomer() + " " + r.getRoom() + "--------------------------");
+            Reservation re2 = it4.next();
+            System.out.println("-Reservation---------------------------------" + re2.getReservationNumber() + " " + re2.getCustomer() + " " + re2.getRoom() + " " + re2.getId() + "--------------------------");
         }
 
     }

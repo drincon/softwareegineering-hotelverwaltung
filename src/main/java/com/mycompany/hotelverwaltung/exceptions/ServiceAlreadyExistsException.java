@@ -7,7 +7,7 @@
 package com.mycompany.hotelverwaltung.exceptions;
 
 /**
- *
+ * Exception ist used to determine if service already excists
  * @author said
  */
 public class ServiceAlreadyExistsException extends Exception {

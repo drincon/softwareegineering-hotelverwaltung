@@ -2,12 +2,12 @@
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
   <persistence-unit name="com.mycompany_Hotelverwaltung_jar_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <class>com.mycompany.hotelverwaltung.Reservation</class>
-    <class>com.mycompany.hotelverwaltung.Room</class>
-    <class>com.mycompany.hotelverwaltung.Service</class>
-    <class>com.mycompany.hotelverwaltung.HotelRooms</class>
-    <class>com.mycompany.hotelverwaltung.Services</class>
-    <class>com.mycompany.hotelverwaltung.Customer</class>
+    <class>com.mycompany.hotelverwaltung.persistence.Reservation</class>
+    <class>com.mycompany.hotelverwaltung.persistence.Room</class>
+    <class>com.mycompany.hotelverwaltung.persistence.Service</class>
+    <class>com.mycompany.hotelverwaltung.persistence.HotelRooms</class>
+    <class>com.mycompany.hotelverwaltung.persistence.Services</class>
+    <class>com.mycompany.hotelverwaltung.persistence.Customer</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby:target/testdb;create=true"/>
       <property name="javax.persistence.jdbc.password" value=""/>

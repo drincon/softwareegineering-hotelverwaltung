@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.mycompany.hotelverwaltung;
+package com.mycompany.hotelverwaltung.persistence;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
@@ -13,7 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- *
+ * Service is the entity that respresents a service in the persistence
  * @author said
  */
 @Entity

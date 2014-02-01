@@ -4,12 +4,13 @@
  * and open the template in the editor.
  */
 
-package com.mycompany.hotelverwaltung;
+package com.mycompany.hotelverwaltung.persistence;
 
+import com.mycompany.hotelverwaltung.exceptions.DepartureIsBeforeArrivalException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,12 +18,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 
 /**
- *
+ * Reservation is an entity that represents a reservation of a hotelroom in the persistence.
  * @author said
  */
 @Entity
@@ -30,6 +29,7 @@ public class Reservation implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="RES_ID")
     private Long id;
     
     int reservationNumber;
@@ -41,27 +41,43 @@ public class Reservation implements Serializable {
     @ManyToOne
     private Room room;
     
-    @OneToMany
+    @ManyToMany
     private List<Service> services;
     
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date arrival;
     
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date departure;
+    private Calendar arrival;
+    
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Calendar departure;
 
     public Reservation(){
         
     }
-    public Reservation( int reservationNumber, Customer c, Room r, Date arrival, Date departure, List<Service> services){
+    
+    /**
+     * constructs one entity of reservation
+     * @param reservationNumber
+     * @param c
+     * @param r
+     * @param arrival
+     * @param departure
+     * @param services
+     * @throws DepartureIsBeforeArrivalException 
+     */
+    public Reservation( int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services) throws DepartureIsBeforeArrivalException{
         this.reservationNumber=reservationNumber;
         this.customer=c;
         this.room=r;
+        if(departure.before(arrival)){
+            throw new DepartureIsBeforeArrivalException();
+        }
         this.departure=departure;
         this.arrival=arrival;
         this.services = services;
         
     }
+
     public int getReservationNumber() {
         return reservationNumber;
     }
@@ -90,23 +106,23 @@ public class Reservation implements Serializable {
         return services;
     }
 
-    public void setServices(ArrayList<Service> services) {
+    public void setServices(List<Service> services) {
         this.services = services;
     }
 
-    public Date getArrival() {
+    public Calendar getArrival() {
         return arrival;
     }
 
-    public void setArrival(Date arrival) {
+    public void setArrival(Calendar arrival) {
         this.arrival = arrival;
     }
 
-    public Date getDeparture() {
+    public Calendar getDeparture() {
         return departure;
     }
 
-    public void setDeparture(Date departure) {
+    public void setDeparture(Calendar departure) {
         this.departure = departure;
     }
 

@@ -5,13 +5,16 @@
  */
 package com.mycompany.hotelverwaltung;
 
+import com.mycompany.hotelverwaltung.persistence.Service;
+import com.mycompany.hotelverwaltung.persistence.Room;
+import com.mycompany.hotelverwaltung.persistence.Customer;
+import com.mycompany.hotelverwaltung.persistence.Reservation;
+import com.mycompany.hotelverwaltung.persistence.RoomType;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -44,7 +47,7 @@ public class DBTest extends TestCase {
         this.c = new Customer("max", "mustermann");
         persistObject(c);
 
-        this.r = new Room("TestRoom", 50, 1);
+        this.r = new Room("TestRoom", 1, RoomType.DOUBLEROOM);
         persistObject(r);
 
         this.s = new Service("Testdienstleistung", 50);
@@ -69,8 +72,10 @@ public class DBTest extends TestCase {
 
     public void testReservation() throws Exception {
         em.getTransaction().begin();
-        Date departure = new Date();
-        Date arrival = new Date();
+        Calendar departure = Calendar.getInstance();
+        departure.set(2009, Calendar.DECEMBER, 15);
+        Calendar arrival = Calendar.getInstance();
+        arrival.set(2009, Calendar.DECEMBER, 12);
         List<Service> services = new ArrayList<Service>();
         services.add(s);
         Reservation res = new Reservation(123, c, r, arrival, departure, services);
@@ -95,20 +100,19 @@ public class DBTest extends TestCase {
     public void testAddAndRemoveCustomer() throws Exception {
         em.getTransaction().begin();
 
-        Customer c = new Customer();
-        c.setAdress("TestStreet");
-        c.setBirthday("01.01.01");
+        Customer c3 = new Customer();
+        c3.setAdress("TestStreet");
         Collection<Reservation> reservations = new ArrayList<Reservation>();
-        c.setReservations(reservations);
-        em.persist(c);
+        c3.setReservations(reservations);
+        em.persist(c3);
         em.getTransaction().commit();
 
         em.getTransaction().begin();
-        Customer c2 = em.find(Customer.class, c.getId());
-        if (!c2.equals(c)) {
+        Customer c2 = em.find(Customer.class, c3.getId());
+        if (!c2.equals(c3)) {
             throw new Exception();
         }
-        em.remove(c);
+        em.remove(c3);
         em.getTransaction().commit();
 
     }
@@ -116,82 +120,42 @@ public class DBTest extends TestCase {
     public void testAddAndRemoveRoom() throws Exception {
         em.getTransaction().begin();
 
-        Room r = new Room();
-        r.setName("Test");
-        r.setPrice(50);
-        r.setRoomNumber(1);
-        em.persist(r);
+        Room r3 = new Room();
+        r3.setName("Test");
+        r3.setRoomNumber(1);
+        em.persist(r3);
 
         em.getTransaction().commit();
 
         em.getTransaction().begin();
-        Room r2 = em.find(Room.class, r.getId());
-        if (!r2.equals(r)) {
+        Room r2 = em.find(Room.class, r3.getId());
+        if (!r2.equals(r3)) {
             throw new Exception();
         }
-        em.remove(r);
+        em.remove(r3);
         em.getTransaction().commit();
     }
 
     public void testAddAndRemoveService() throws Exception {
         em.getTransaction().begin();
 
-        Service s = new Service();
-        s.setName("Test");
-        s.setPrice(10);
-        em.persist(s);
+        Service s3 = new Service();
+        s3.setName("Test");
+        s3.setPrice(10);
+        em.persist(s3);
 
         em.getTransaction().commit();
 
         em.getTransaction().begin();
-        Service s2 = em.find(Service.class, s.getId());
-        if (!s2.equals(s)) {
+        Service s2 = em.find(Service.class, s3.getId());
+        if (!s2.equals(s3)) {
             throw new Exception();
         }
-        em.remove(s);
+        em.remove(s3);
         em.getTransaction().commit();
 
     }
 
-    public void testServices() {
-        em.getTransaction().begin();
-
-        Query q = em.createQuery("SELECT t FROM Service t");
-        List<Service> list = q.getResultList();
-        Iterator<Service> it = list.iterator();
-        Map<String, Service> map = new HashMap<String, Service>();
-        List<String> namesOfServices = new ArrayList<String>();
-        while (it.hasNext()) {
-            Service s = it.next();
-            namesOfServices.add(s.getName());
-            map.put(s.getName(), s);
-        }
-        new Services(namesOfServices, map);
-
-        em.getTransaction().commit();
-    }
-
-    public void testHotelRooms() {
-        em.getTransaction().begin();
-
-        // configure Rooms
-        Query q = em.createQuery("SELECT t FROM Room t");
-        List<Room> list = q.getResultList();
-        Iterator<Room> it = list.iterator();
-        Map<Integer, Room> rooms = new HashMap<Integer, Room>();
-        List<Integer> roomNumbers = new ArrayList<Integer>();
-        while (it.hasNext()) {
-            Room r = it.next();
-            roomNumbers.add(r.getRoomNumber());
-            rooms.put(r.getRoomNumber(), r);
-        }
-        new HotelRooms(roomNumbers, rooms);
-
-        em.getTransaction().commit();
-
-    }
-
-  
     public void testTransaction() {
         em.getTransaction().begin();
         em.getTransaction().commit();
@@ -209,29 +173,29 @@ public class DBTest extends TestCase {
         List<Room> list = q.getResultList();
         Iterator<Room> it = list.iterator();
         while (it.hasNext()) {
-            Room r = it.next();
-            System.out.println("-Room-------------------------------------" + r.getName() + "----------------------------");
+            Room r2 = it.next();
+            System.out.println("-Room-------------------------------------" + r2.getName() + "----------------------------");
         }
         q = em.createQuery("Select c from Customer c");
         List<Customer> list2 = q.getResultList();
         Iterator<Customer> it2 = list2.iterator();
         while (it2.hasNext()) {
-            Customer c = it2.next();
-            System.out.println("-Customer-------------------------------------" + c.getName() + " " + c.getSurname() + "----------------------------");
+            Customer c2 = it2.next();
+            System.out.println("-Customer-------------------------------------" + c2.getName() + " " + c2.getSurname() + "----------------------------");
         }
         q = em.createQuery("Select s from Service s");
         List<Service> list3 = q.getResultList();
         Iterator<Service> it3 = list3.iterator();
         while (it3.hasNext()) {
-            Service s = it3.next();
-            System.out.println("-Service-------------------------------------" + s.getName() + "----------------------------");
+            Service s2 = it3.next();
+            System.out.println("-Service-------------------------------------" + s2.getName() + "----------------------------");
         }
         q = em.createQuery("Select r from Reservation r");
         List<Reservation> list4 = q.getResultList();
         Iterator<Reservation> it4 = list4.iterator();
         while (it4.hasNext()) {
-            Reservation r = it4.next();
-            System.out.println("-Reservation---------------------------------" + r.getReservationNumber() + " " + r.getCustomer() + " " + r.getRoom() + "--------------------------");
+            Reservation re2 = it4.next();
+            System.out.println("-Reservation---------------------------------" + re2.getReservationNumber() + " " + re2.getCustomer() + " " + re2.getRoom() + "--------------------------");
         }
 
     }
