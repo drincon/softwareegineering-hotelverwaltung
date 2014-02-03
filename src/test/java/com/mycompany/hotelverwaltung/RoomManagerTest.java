@@ -98,7 +98,7 @@ public class RoomManagerTest extends TestCase {
             throw new Exception();
         }
         /*
-         TODO: checken auf exception
+         TODO: kein schöner test^^
          */
     }
 
