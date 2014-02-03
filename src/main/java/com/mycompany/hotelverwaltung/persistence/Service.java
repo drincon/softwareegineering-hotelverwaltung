@@ -25,6 +25,7 @@ public class Service implements Serializable {
     
     private String name;
     private int price;
+    
 
     public Service(){
         

@@ -28,7 +28,7 @@ public interface PersistenceInterface {
     public void removeRoom(Room r) throws Exception;
     public void addService(String name, int price) throws ServiceAlreadyExistsException;
     public void removeService(Service s);
-    public void addReservation( int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services) throws DepartureIsBeforeArrivalException;
+    public void addReservation( int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services, Calendar[] servicesDates) throws DepartureIsBeforeArrivalException;
     public void removeReservation(int id);
     public void removeReservation(Reservation r);
     public List<Room> checkAvailability(Calendar checkInDate, Calendar CheckOutDate, RoomType roomtype);

@@ -152,9 +152,9 @@ public class RoomManager implements PersistenceInterface {
      * @throws DepartureIsBeforeArrivalException
      */
     @Override
-    public void addReservation(int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services) throws DepartureIsBeforeArrivalException {
+    public void addReservation(int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services, Calendar[] servicesDates) throws DepartureIsBeforeArrivalException {
         em.getTransaction().begin();
-        em.persist(new Reservation(reservationNumber, c, r, arrival, departure, services));
+        em.persist(new Reservation(reservationNumber, c, r, arrival, departure, services, servicesDates));
         em.getTransaction().commit();
     }
 

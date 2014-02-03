@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.mycompany.hotelverwaltung.persistence;
 
 import com.mycompany.hotelverwaltung.exceptions.DepartureIsBeforeArrivalException;
@@ -18,64 +17,73 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 
 /**
- * Reservation is an entity that represents a reservation of a hotelroom in the persistence.
+ * Reservation is an entity that represents a reservation of a hotelroom in the
+ * persistence.
+ *
  * @author said
  */
 @Entity
 public class Reservation implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="RES_ID")
+    @Column(name = "RES_ID")
     private Long id;
-    
+
     int reservationNumber;
-    
+
     @ManyToOne
-    @JoinColumn(name="customer_fk")
+    @JoinColumn(name = "customer_fk")
     private Customer customer;
-    
+
     @ManyToOne
     private Room room;
-    
+
     @ManyToMany
     private List<Service> services;
+
     
-    
+    private Calendar[] servicesDates;
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Calendar arrival;
-    
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Calendar departure;
 
-    public Reservation(){
-        
+    public Reservation() {
+
     }
-    
+
     /**
      * constructs one entity of reservation
+     *
      * @param reservationNumber
      * @param c
      * @param r
      * @param arrival
      * @param departure
      * @param services
-     * @throws DepartureIsBeforeArrivalException 
+     * @param servicesDates
+     * @throws DepartureIsBeforeArrivalException
      */
-    public Reservation( int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services) throws DepartureIsBeforeArrivalException{
-        this.reservationNumber=reservationNumber;
-        this.customer=c;
-        this.room=r;
-        if(departure.before(arrival)){
+    public Reservation(int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services, Calendar[] servicesDates) throws DepartureIsBeforeArrivalException {
+        this.reservationNumber = reservationNumber;
+        this.customer = c;
+        this.room = r;
+        if (departure.before(arrival)) {
             throw new DepartureIsBeforeArrivalException();
         }
-        this.departure=departure;
-        this.arrival=arrival;
+        this.departure = departure;
+        this.arrival = arrival;
         this.services = services;
-        
+        this.servicesDates = servicesDates;
+
     }
 
     public int getReservationNumber() {
@@ -158,5 +166,5 @@ public class Reservation implements Serializable {
     public String toString() {
         return "com.mycompany.hotelverwaltung.Reservation[ id=" + id + " ]";
     }
-    
+
 }

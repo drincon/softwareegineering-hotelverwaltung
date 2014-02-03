@@ -5,8 +5,6 @@
     <class>com.mycompany.hotelverwaltung.persistence.Reservation</class>
     <class>com.mycompany.hotelverwaltung.persistence.Room</class>
     <class>com.mycompany.hotelverwaltung.persistence.Service</class>
-    <class>com.mycompany.hotelverwaltung.persistence.HotelRooms</class>
-    <class>com.mycompany.hotelverwaltung.persistence.Services</class>
     <class>com.mycompany.hotelverwaltung.persistence.Customer</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby:target/testdb;create=true"/>

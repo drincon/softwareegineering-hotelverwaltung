@@ -78,7 +78,9 @@ public class DBTest extends TestCase {
         arrival.set(2009, Calendar.DECEMBER, 12);
         List<Service> services = new ArrayList<Service>();
         services.add(s);
-        Reservation res = new Reservation(123, c, r, arrival, departure, services);
+        Calendar[] servicesDate= new Calendar[2];
+                
+        Reservation res = new Reservation(123, c, r, arrival, departure, services,servicesDate);
         em.persist(res);
         em.getTransaction().commit();
 

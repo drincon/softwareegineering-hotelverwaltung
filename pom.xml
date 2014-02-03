@@ -98,7 +98,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>de.spqr.activitiderbysoapservice.App</mainClass>
+                            <mainClass>com.mycompany.hotelverwaltung.persistence.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
