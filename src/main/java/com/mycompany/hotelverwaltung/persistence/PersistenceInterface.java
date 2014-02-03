@@ -9,6 +9,7 @@ package com.mycompany.hotelverwaltung.persistence;
 import com.mycompany.hotelverwaltung.exceptions.DepartureIsBeforeArrivalException;
 import com.mycompany.hotelverwaltung.exceptions.RoomNumberExistsException;
 import com.mycompany.hotelverwaltung.exceptions.ServiceAlreadyExistsException;
+import com.mycompany.hotelverwaltung.exceptions.ServiceDateIsNotDuringStayException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface PersistenceInterface {
     public void removeRoom(Room r) throws Exception;
     public void addService(String name, int price) throws ServiceAlreadyExistsException;
     public void removeService(Service s);
-    public void addReservation( int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services, Calendar[] servicesDates) throws DepartureIsBeforeArrivalException;
+    public void addReservation( int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services, List<Calendar> servicesDates) throws DepartureIsBeforeArrivalException,ServiceDateIsNotDuringStayException;
     public void removeReservation(int id);
     public void removeReservation(Reservation r);
     public List<Room> checkAvailability(Calendar checkInDate, Calendar CheckOutDate, RoomType roomtype);

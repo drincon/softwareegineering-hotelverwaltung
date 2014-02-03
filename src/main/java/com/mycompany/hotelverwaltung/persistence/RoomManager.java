@@ -8,10 +8,13 @@ package com.mycompany.hotelverwaltung.persistence;
 import com.mycompany.hotelverwaltung.exceptions.DepartureIsBeforeArrivalException;
 import com.mycompany.hotelverwaltung.exceptions.RoomNumberExistsException;
 import com.mycompany.hotelverwaltung.exceptions.ServiceAlreadyExistsException;
+import com.mycompany.hotelverwaltung.exceptions.ServiceDateIsNotDuringStayException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -24,7 +27,6 @@ public class RoomManager implements PersistenceInterface {
 
     private static final String PERSISTENCE_UNIT_NAME = "com.mycompany_Hotelverwaltung_jar_1.0-SNAPSHOTPU";
     private final EntityManager em;
-
 
     public RoomManager() {
         EntityManagerFactory factory
@@ -152,8 +154,17 @@ public class RoomManager implements PersistenceInterface {
      * @throws DepartureIsBeforeArrivalException
      */
     @Override
-    public void addReservation(int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services, Calendar[] servicesDates) throws DepartureIsBeforeArrivalException {
+    public void addReservation(int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services, List<Calendar> servicesDates) throws DepartureIsBeforeArrivalException, ServiceDateIsNotDuringStayException {
         em.getTransaction().begin();
+        try {
+            for (int i = 0; i < servicesDates.size(); i++) {
+                if (dateIsInTimeframe(arrival, departure, servicesDates.get(i))) {
+                    throw new ServiceDateIsNotDuringStayException();
+
+                }
+            }
+        } catch ( ArrayIndexOutOfBoundsException e){
+        }
         em.persist(new Reservation(reservationNumber, c, r, arrival, departure, services, servicesDates));
         em.getTransaction().commit();
     }
@@ -256,7 +267,6 @@ public class RoomManager implements PersistenceInterface {
         em.getTransaction().commit();
     }
 
-
     /**
      * used to close the entitymanager
      */
@@ -301,11 +311,12 @@ public class RoomManager implements PersistenceInterface {
      * @param roomtype type of room
      * @param services booked services
      * @return
-     * @throws com.mycompany.hotelverwaltung.exceptions.DepartureIsBeforeArrivalException
+     * @throws
+     * com.mycompany.hotelverwaltung.exceptions.DepartureIsBeforeArrivalException
      */
     @Override
     public Double calculatePrice(Calendar checkInDate, Calendar checkOutDate, RoomType roomtype, List<Service> services) throws DepartureIsBeforeArrivalException {
-        if(checkOutDate.before(checkInDate)){
+        if (checkOutDate.before(checkInDate)) {
             throw new DepartureIsBeforeArrivalException();
         }
         Long price = (checkOutDate.getTimeInMillis() - checkInDate.getTimeInMillis()) / (1000 * 60 * 60 * 24) * roomtype.getValue();

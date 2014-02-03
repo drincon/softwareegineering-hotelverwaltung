@@ -61,10 +61,12 @@ public class RoomManagerTest extends TestCase {
         arrival.set(2000, Calendar.JANUARY, 16);
         Calendar departure = Calendar.getInstance();
         departure.set(2000, Calendar.JANUARY, 18);
-        List<Service> list = new ArrayList();
+        List<Service> list = new ArrayList<Service>();
         list.add(s);
-        Calendar[] servicesDate= new Calendar[1];
-        this.re = new Reservation(1, c, r, arrival, departure, list, servicesDate);
+        List<Calendar> callist= new ArrayList<Calendar>();
+        callist.add(arrival);
+        
+        this.re = new Reservation(1, c, r, arrival, departure, list, callist);
         persistObject(re);
 
     }
@@ -173,7 +175,11 @@ public class RoomManagerTest extends TestCase {
         List<Service> list = new ArrayList();
         list.add(s2);
         
-        Calendar[] servicesDate = new Calendar[2];
+        List<Calendar> servicesDate = new ArrayList<Calendar>();
+        Calendar dateForService= Calendar.getInstance();
+        dateForService.set(2000,Calendar.JANUARY,11);
+        servicesDate.add(dateForService);
+        
 
         rm.addReservation(1, c2, r2, arrival, departure, list, servicesDate);
         Reservation tmp = null;

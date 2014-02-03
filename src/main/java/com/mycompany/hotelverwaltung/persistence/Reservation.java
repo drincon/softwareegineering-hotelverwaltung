@@ -7,7 +7,9 @@ package com.mycompany.hotelverwaltung.persistence;
 
 import com.mycompany.hotelverwaltung.exceptions.DepartureIsBeforeArrivalException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +20,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Temporal;
 
 /**
@@ -48,7 +51,7 @@ public class Reservation implements Serializable {
     private List<Service> services;
 
     
-    private Calendar[] servicesDates;
+    private String[] servicesDates;
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Calendar arrival;
@@ -72,7 +75,7 @@ public class Reservation implements Serializable {
      * @param servicesDates
      * @throws DepartureIsBeforeArrivalException
      */
-    public Reservation(int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services, Calendar[] servicesDates) throws DepartureIsBeforeArrivalException {
+    public Reservation(int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services, List<Calendar> servicesDates) throws DepartureIsBeforeArrivalException {
         this.reservationNumber = reservationNumber;
         this.customer = c;
         this.room = r;
@@ -82,7 +85,10 @@ public class Reservation implements Serializable {
         this.departure = departure;
         this.arrival = arrival;
         this.services = services;
-        this.servicesDates = servicesDates;
+        this.servicesDates= new String[servicesDates.size()];
+        for(int i=0; i<servicesDates.size();i++){
+            this.servicesDates[i]=servicesDates.get(i).getTime().toString();
+        }
 
     }
 
@@ -116,6 +122,23 @@ public class Reservation implements Serializable {
 
     public void setServices(List<Service> services) {
         this.services = services;
+    }
+
+    public List<Calendar> getServicesDates() {
+        List<Calendar> list= new ArrayList<Calendar>();
+        for(int i=0;i<servicesDates.length;i++){
+            Calendar cal=Calendar.getInstance();
+            cal.setTime(new Date(servicesDates[i]));
+            list.add(cal);
+        }
+        return list;
+    }
+
+    public void setServicesDates(List<Calendar> servicesDates) {
+        this.servicesDates= new String[servicesDates.size()];
+        for(int i=0; i<servicesDates.size();i++){
+            this.servicesDates[i]=servicesDates.get(i).getTime().toString();
+        }
     }
 
     public Calendar getArrival() {
