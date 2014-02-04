@@ -269,7 +269,7 @@ public class NewBookingServicesSelection extends javax.swing.JFrame {
             services.add(pi.getServiceList().get(jTable1.getSelectedRow()));
             Calendar cal1 = Calendar.getInstance();
             cal1.setTime(this.serviceDate.getDate());
-            if (pi.dateIsInTimeframe(checkIn, checkOut, cal1)) {
+            if (!pi.dateIsNotInTimeframe(checkIn, checkOut, cal1)) {
                 ErrorWindow s = new ErrorWindow("Datum liegt nicht im Buchungszeitraum.");
                 s.setVisible(true);
             } else {

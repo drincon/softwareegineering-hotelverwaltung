@@ -43,6 +43,7 @@ public class ErrorWindow extends javax.swing.JFrame {
 
         jLabel1.setText("jLabel1");
 
+        jButton1.setBackground(new java.awt.Color(187, 187, 187));
         jButton1.setText("OK");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

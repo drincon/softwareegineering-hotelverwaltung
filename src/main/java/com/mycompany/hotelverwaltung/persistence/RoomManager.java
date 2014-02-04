@@ -119,10 +119,10 @@ public class RoomManager implements PersistenceInterface {
         List<Reservation> reservations = getReservationList();
         Iterator<Reservation> it = reservations.iterator();
         List<Room> rooms = new ArrayList<Room>();
-        if(checkOutDate.before(checkInDate)){
+        if (checkOutDate.before(checkInDate)) {
             throw new DepartureIsBeforeArrivalException();
         }
-        
+
         while (it.hasNext()) {
             Reservation r = it.next();
             if (r.getRoom().getRoomType() == roomtype) {
@@ -130,18 +130,17 @@ public class RoomManager implements PersistenceInterface {
                     Iterator it2 = reservations.iterator();
                     while (it2.hasNext()) {
                         Reservation r2 = it.next();
-                        if (r.getRoom().equals(r2.getRoom()) && !dateIsInTimeframe(checkInDate, checkOutDate, r2.getArrival())) {
-                            if (!r.getRoom().equals(r2.getRoom())) {
-                                addRoomToList(rooms, r.getRoom());
-                            }
+                        if (r.getRoom().equals(r2.getRoom()) && dateIsNotInTimeframe(checkInDate, checkOutDate, r2.getArrival())) {
+                            addRoomToList(rooms, r.getRoom());
                         }
                     }
                 }
-                if (dateIsInTimeframe(checkInDate, checkOutDate, r.getDeparture()) && dateIsInTimeframe(checkInDate, checkOutDate, r.getArrival())) {
+                if (dateIsNotInTimeframe(checkInDate, checkOutDate, r.getDeparture()) && dateIsNotInTimeframe(checkInDate, checkOutDate, r.getArrival())) {
                     addRoomToList(rooms, r.getRoom());
                 }
             }
         }
+
         List<Room> allRooms = getRoomList();
         Iterator<Room> itroom = allRooms.iterator();
         while (itroom.hasNext()) {
@@ -153,9 +152,7 @@ public class RoomManager implements PersistenceInterface {
                     Reservation re = it.next();
                     if (re.getRoom().equals(r)) {
                         check = false;
-                    }
-                    if (re.getRoom().equals(r)) {
-                        if (!dateIsInTimeframe(checkInDate, checkOutDate, re.getArrival()) || !dateIsInTimeframe(checkInDate, checkOutDate, re.getDeparture())) {
+                        if (!dateIsNotInTimeframe(checkInDate, checkOutDate, re.getArrival()) || !dateIsNotInTimeframe(checkInDate, checkOutDate, re.getDeparture())) {
                             rooms.remove(r);
                         }
                     }
@@ -190,7 +187,7 @@ public class RoomManager implements PersistenceInterface {
 
             } else {
                 for (int i = 0; i < servicesDates.size(); i++) {
-                    if (dateIsInTimeframe(arrival, departure, servicesDates.get(i))) {
+                    if (dateIsNotInTimeframe(arrival, departure, servicesDates.get(i))) {
                         throw new ServiceDateIsNotDuringStayException();
 
                     }
@@ -378,11 +375,23 @@ public class RoomManager implements PersistenceInterface {
      * @param date date to check
      * @return
      */
-    public boolean dateIsInTimeframe(Calendar begin, Calendar end, Calendar date) {
-        if (begin.before(date) && end.after(date)) {
-            return false;
-        } else {
+    public boolean dateIsNotInTimeframe(Calendar begin, Calendar end, Calendar date) {
+        long l1= begin.getTimeInMillis();
+        long l2= end.getTimeInMillis();
+        long l3= date.getTimeInMillis();
+        if(l3<l1){
             return true;
+        }
+        if(l3>l2){
+            return true;
+        }
+        if( l1==l3){
+            return true;
+        }
+        if(l2==l3){
+            return true;
+        } else{
+            return false;
         }
     }
 

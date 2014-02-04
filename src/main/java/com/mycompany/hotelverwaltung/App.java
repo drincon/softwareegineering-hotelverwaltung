@@ -25,7 +25,7 @@ public class App {
          String formatted = format1.format(cal.getTime());
          System.out.println(formatted);*/
         PersistenceInterface pi = new RoomManager();
-        Calendar cal = Calendar.getInstance();
+        /*Calendar cal = Calendar.getInstance();
         cal.set(2009, Calendar.DECEMBER, 12);
 
         pi.addCustomer("Mustermann", "Max", "musterstraße", "7", "181648", "Herr", "Musterland", cal);
@@ -33,7 +33,7 @@ public class App {
 
         pi.addService("Dampfbad", 34);
         pi.addService("Sauna", 59);
-        
+        */
         
 
         StartWindow s = new StartWindow(pi);

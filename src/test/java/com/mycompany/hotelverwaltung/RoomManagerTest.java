@@ -81,8 +81,15 @@ public class RoomManagerTest extends TestCase {
         em.getTransaction().begin();
         re.setCustomer(null);
         em.remove(re);
+        em.getTransaction().commit();
+        em.getTransaction().begin();
+        c.setReservations(null);
         em.remove(c);
+        em.getTransaction().commit();
+        em.getTransaction().begin();
         em.remove(r);
+        em.getTransaction().commit();
+        em.getTransaction().begin();
         em.remove(s);
         em.getTransaction().commit();
 
@@ -107,14 +114,14 @@ public class RoomManagerTest extends TestCase {
     }
 
     public void testServiceAlreadyExistsException() throws Exception {
-        boolean b = false;
+        boolean b = true;
         try {
             rm.addService(s.getName(), s.getPrice());
         } catch (ServiceAlreadyExistsException e) {
-            b = true;
+            b = false;
         }
 
-        if (!b) {
+        if (b) {
             throw new Exception();
         }
 
@@ -209,15 +216,15 @@ public class RoomManagerTest extends TestCase {
         checkOutDate.set(2000, Calendar.JULY, 20);
         Calendar checkDay = Calendar.getInstance();
         checkDay.set(2000, Calendar.JULY, 22);
-        if (!rm.dateIsInTimeframe(checkInDate, checkOutDate, checkDay)) {
+        if (!rm.dateIsNotInTimeframe(checkInDate, checkOutDate, checkDay)) {
             throw new Exception();
         }
         checkDay.set(2000, Calendar.JULY, 9);
-        if (!rm.dateIsInTimeframe(checkInDate, checkOutDate, checkDay)) {
+        if (!rm.dateIsNotInTimeframe(checkInDate, checkOutDate, checkDay)) {
             throw new Exception();
         }
         checkDay.set(2000, Calendar.JULY, 15);
-        if (rm.dateIsInTimeframe(checkInDate, checkOutDate, checkDay)) {
+        if (rm.dateIsNotInTimeframe(checkInDate, checkOutDate, checkDay)) {
             throw new Exception();
         }
     }
@@ -412,10 +419,6 @@ public class RoomManagerTest extends TestCase {
         }
     }
 
-    public void testRoomManager() {
-        RoomManager rm2 = new RoomManager();
-        rm2.close();
-    }
 
     public void testgetServuceList() throws Exception {
         List<Service> list = rm.getServiceList();
