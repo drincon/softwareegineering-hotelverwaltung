@@ -7,10 +7,13 @@ package com.mycompany.hotelverwaltung.persistence;
 
 import com.mycompany.hotelverwaltung.exceptions.DepartureIsBeforeArrivalException;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -125,11 +128,12 @@ public class Reservation implements Serializable {
         this.services = services;
     }
 
-    public List<Calendar> getServicesDates() {
+    public List<Calendar> getServicesDates() throws ParseException {
         List<Calendar> list = new ArrayList<Calendar>();
+        SimpleDateFormat format1 = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy",Locale.ENGLISH);
         for (String servicesDate : servicesDates) {
             Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date(servicesDate));
+            cal.setTime(format1.parse(servicesDate));
             list.add(cal);
         }
         return list;
@@ -137,8 +141,9 @@ public class Reservation implements Serializable {
 
     public void setServicesDates(List<Calendar> servicesDates) {
         this.servicesDates = new String[servicesDates.size()];
+        SimpleDateFormat format1 = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy",Locale.ENGLISH);
         for (int i = 0; i < servicesDates.size(); i++) {
-            this.servicesDates[i] = servicesDates.get(i).getTime().toString();
+            this.servicesDates[i] = format1.format(servicesDates.get(i).getTime());
         }
     }
 

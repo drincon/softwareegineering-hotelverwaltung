@@ -182,9 +182,9 @@ public class RoomManagerTest extends TestCase {
         if (d != 250) {
             throw new Exception();
         }
-        /*
-         TODO: this one isn't nice
-         */
+        
+         //TODO: this one isn't nice
+         
     }
 
     public void testUpdateCustomer() throws Exception {

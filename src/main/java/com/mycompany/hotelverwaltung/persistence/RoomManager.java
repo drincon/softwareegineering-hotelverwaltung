@@ -111,13 +111,18 @@ public class RoomManager implements PersistenceInterface {
      * @param checkOutDate checkoutdate
      * @param roomtype roomtype
      * @return list of all available rooms
-     * @throws com.mycompany.hotelverwaltung.exceptions.DepartureIsBeforeArrivalException
+     * @throws
+     * com.mycompany.hotelverwaltung.exceptions.DepartureIsBeforeArrivalException
      */
     @Override
-    public List<Room> checkAvailability(Calendar checkInDate, Calendar checkOutDate, RoomType roomtype) throws DepartureIsBeforeArrivalException{
+    public List<Room> checkAvailability(Calendar checkInDate, Calendar checkOutDate, RoomType roomtype) throws DepartureIsBeforeArrivalException {
         List<Reservation> reservations = getReservationList();
         Iterator<Reservation> it = reservations.iterator();
         List<Room> rooms = new ArrayList<Room>();
+        if(checkOutDate.before(checkInDate)){
+            throw new DepartureIsBeforeArrivalException();
+        }
+        
         while (it.hasNext()) {
             Reservation r = it.next();
             if (r.getRoom().getRoomType() == roomtype) {
@@ -139,16 +144,24 @@ public class RoomManager implements PersistenceInterface {
         }
         List<Room> allRooms = getRoomList();
         Iterator<Room> itroom = allRooms.iterator();
-        System.out.println(rooms);
         while (itroom.hasNext()) {
             Room r = itroom.next();
-            it = reservations.iterator();
-            while (it.hasNext()) {
-                Reservation re = it.next();
-                if (re.getRoom().equals(r)) {
-                    if (!dateIsInTimeframe(checkInDate, checkOutDate, re.getArrival()) || !dateIsInTimeframe(checkInDate, checkOutDate, re.getDeparture())) {
-                        rooms.remove(r);
+            if (r.getRoomType() == roomtype) {
+                it = reservations.iterator();
+                boolean check = true;
+                while (it.hasNext()) {
+                    Reservation re = it.next();
+                    if (re.getRoom().equals(r)) {
+                        check = false;
                     }
+                    if (re.getRoom().equals(r)) {
+                        if (!dateIsInTimeframe(checkInDate, checkOutDate, re.getArrival()) || !dateIsInTimeframe(checkInDate, checkOutDate, re.getDeparture())) {
+                            rooms.remove(r);
+                        }
+                    }
+                }
+                if (check) {
+                    rooms.add(r);
                 }
             }
         }
@@ -166,7 +179,8 @@ public class RoomManager implements PersistenceInterface {
      * @param services booked services
      * @param servicesDates
      * @throws DepartureIsBeforeArrivalException
-     * @throws com.mycompany.hotelverwaltung.exceptions.ServiceDateIsNotDuringStayException
+     * @throws
+     * com.mycompany.hotelverwaltung.exceptions.ServiceDateIsNotDuringStayException
      */
     @Override
     public void addReservation(int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services, List<Calendar> servicesDates) throws DepartureIsBeforeArrivalException, ServiceDateIsNotDuringStayException {
@@ -278,15 +292,16 @@ public class RoomManager implements PersistenceInterface {
      * removes Customer from persistence
      *
      * @param c
-     * @throws com.mycompany.hotelverwaltung.exceptions.CustomerHasReservationException
+     * @throws
+     * com.mycompany.hotelverwaltung.exceptions.CustomerHasReservationException
      */
     @Override
     public void removeCustomer(Customer c) throws CustomerHasReservationException {
         em.getTransaction().begin();
-        Iterator<Reservation> it= getReservationList().iterator();
-        while(it.hasNext()){
-            Reservation re=it.next();
-            if(re.getCustomer().equals(c)){
+        Iterator<Reservation> it = getReservationList().iterator();
+        while (it.hasNext()) {
+            Reservation re = it.next();
+            if (re.getCustomer().equals(c)) {
                 throw new CustomerHasReservationException();
             }
         }
@@ -356,8 +371,7 @@ public class RoomManager implements PersistenceInterface {
     }
 
     /**
-     * helping method used to check if date i in a timeframe used to be private
-     * but for testing purposes its public!!!
+     * helping method used to check if date i in a timeframe
      *
      * @param begin of timeframe
      * @param end of timeframe

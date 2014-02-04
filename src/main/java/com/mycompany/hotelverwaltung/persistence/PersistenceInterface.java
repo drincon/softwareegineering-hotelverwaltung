@@ -35,5 +35,6 @@ public interface PersistenceInterface {
     public void removeReservation(Reservation r);
     public List<Room> checkAvailability(Calendar checkInDate, Calendar CheckOutDate, RoomType roomtype) throws DepartureIsBeforeArrivalException;
     public Double calculatePrice(Calendar checkInDate, Calendar CheckOutDate, RoomType roomtype, List<Service> services)throws DepartureIsBeforeArrivalException ;
+    public boolean dateIsInTimeframe(Calendar begin, Calendar end, Calendar date);
 
 }
