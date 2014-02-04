@@ -19,11 +19,7 @@ import java.util.Date;
 public class App {
 
     public static void main(String[] args) throws RoomNumberExistsException, ServiceAlreadyExistsException {
-        /*SimpleDateFormat format1 = new SimpleDateFormat("E MMM d hh:mm:ss z yyyy");
-         Calendar cal = Calendar.getInstance();
-         cal.set(2000, Calendar.JANUARY, 16);
-         String formatted = format1.format(cal.getTime());
-         System.out.println(formatted);*/
+       
         PersistenceInterface pi = new RoomManager();
         /*Calendar cal = Calendar.getInstance();
         cal.set(2009, Calendar.DECEMBER, 12);

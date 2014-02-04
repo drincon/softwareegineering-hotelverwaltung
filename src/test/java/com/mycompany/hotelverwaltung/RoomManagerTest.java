@@ -227,6 +227,11 @@ public class RoomManagerTest extends TestCase {
         if (rm.dateIsNotInTimeframe(checkInDate, checkOutDate, checkDay)) {
             throw new Exception();
         }
+        checkDay.set(2000,Calendar.JULY, 10);
+        if (rm.dateIsNotInTimeframe(checkInDate, checkOutDate, checkDay)){
+            throw new Exception();
+        }
+            
     }
 
     public void testCheckAvailability() throws Exception {

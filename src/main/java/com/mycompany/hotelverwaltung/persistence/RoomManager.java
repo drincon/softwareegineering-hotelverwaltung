@@ -12,6 +12,7 @@ import com.mycompany.hotelverwaltung.exceptions.ServiceAlreadyExistsException;
 import com.mycompany.hotelverwaltung.exceptions.ServiceDateIsNotDuringStayException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -279,8 +280,17 @@ public class RoomManager implements PersistenceInterface {
     }
 
     //untested
-    public void removeCustomer(int id) throws CustomerHasReservationException {
+    public void removeCustomer(int id) {
         em.getTransaction().begin();
+        Customer cus=em.find(Customer.class, id);
+        Collection<Reservation> res=cus.getReservations();
+        Iterator<Reservation> it=res.iterator();
+        while(it.hasNext()){
+            Reservation res1=it.next();
+            em.find(Reservation.class, res1.getId());
+            res1.setCustomer(null);
+            em.remove(res1);
+        }
         em.remove(em.find(Customer.class, id));
         em.getTransaction().commit();
     }
@@ -377,19 +387,20 @@ public class RoomManager implements PersistenceInterface {
      */
     public boolean dateIsNotInTimeframe(Calendar begin, Calendar end, Calendar date) {
         long l1= begin.getTimeInMillis();
-        long l2= end.getTimeInMillis();
-        long l3= date.getTimeInMillis();
-        if(l3<l1){
+        long endl= end.getTimeInMillis();
+        long datel= date.getTimeInMillis();
+        if(datel<l1){
             return true;
         }
-        if(l3>l2){
+        if(datel>endl){
             return true;
         }
-        if( l1==l3){
-            return true;
+        
+        if( l1==datel){
+            return false;
         }
-        if(l2==l3){
-            return true;
+        if(endl==datel){
+            return false;
         } else{
             return false;
         }

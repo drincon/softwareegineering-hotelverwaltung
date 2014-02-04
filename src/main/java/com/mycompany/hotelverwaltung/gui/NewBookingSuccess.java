@@ -74,6 +74,7 @@ public class NewBookingSuccess extends javax.swing.JFrame {
             d = pi.calculatePrice(checkIn, checkOut, room.getRoomType(), services);
         } catch (DepartureIsBeforeArrivalException ex) {
            // Exception was thrown by this method to because i was wrong about the application flow.
+            System.out.println(ex.getStackTrace());
         }
         price.setText(String.valueOf(d));
     }
