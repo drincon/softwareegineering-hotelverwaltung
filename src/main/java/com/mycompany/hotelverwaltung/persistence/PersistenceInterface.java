@@ -6,6 +6,7 @@
 
 package com.mycompany.hotelverwaltung.persistence;
 
+import com.mycompany.hotelverwaltung.exceptions.CustomerHasReservationException;
 import com.mycompany.hotelverwaltung.exceptions.DepartureIsBeforeArrivalException;
 import com.mycompany.hotelverwaltung.exceptions.RoomNumberExistsException;
 import com.mycompany.hotelverwaltung.exceptions.ServiceAlreadyExistsException;
@@ -24,8 +25,8 @@ public interface PersistenceInterface {
     public List<Service> getServiceList();
     public void updateCustomer(Long id,String name, String surname, String adress, String streetnumber, String zipcode, String city, String country, Calendar birthday) ;
     public void addCustomer(String name, String surname, String adress, String streetnumber, String zipcode, String city, String country, Calendar birthday) ;
-    public void removeCustomer(Customer c);
-    public void addRoom(String name, int price, int roomNumber, RoomType roomType) throws RoomNumberExistsException;
+    public void removeCustomer(Customer c) throws CustomerHasReservationException;
+    public void addRoom(String name,  int roomNumber, RoomType roomType) throws RoomNumberExistsException;
     public void removeRoom(Room r) throws Exception;
     public void addService(String name, int price) throws ServiceAlreadyExistsException;
     public void removeService(Service s);

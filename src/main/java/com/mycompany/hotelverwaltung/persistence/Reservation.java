@@ -19,8 +19,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
 import javax.persistence.Temporal;
 
 /**
@@ -50,7 +48,6 @@ public class Reservation implements Serializable {
     @ManyToMany
     private List<Service> services;
 
-    
     private String[] servicesDates;
 
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -85,9 +82,13 @@ public class Reservation implements Serializable {
         this.departure = departure;
         this.arrival = arrival;
         this.services = services;
-        this.servicesDates= new String[servicesDates.size()];
-        for(int i=0; i<servicesDates.size();i++){
-            this.servicesDates[i]=servicesDates.get(i).getTime().toString();
+        if (servicesDates == null) {
+            this.servicesDates = null;
+        } else {
+            this.servicesDates = new String[servicesDates.size()];
+            for (int i = 0; i < servicesDates.size(); i++) {
+                this.servicesDates[i] = servicesDates.get(i).getTime().toString();
+            }
         }
 
     }
@@ -125,19 +126,19 @@ public class Reservation implements Serializable {
     }
 
     public List<Calendar> getServicesDates() {
-        List<Calendar> list= new ArrayList<Calendar>();
-        for(int i=0;i<servicesDates.length;i++){
-            Calendar cal=Calendar.getInstance();
-            cal.setTime(new Date(servicesDates[i]));
+        List<Calendar> list = new ArrayList<Calendar>();
+        for (String servicesDate : servicesDates) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date(servicesDate));
             list.add(cal);
         }
         return list;
     }
 
     public void setServicesDates(List<Calendar> servicesDates) {
-        this.servicesDates= new String[servicesDates.size()];
-        for(int i=0; i<servicesDates.size();i++){
-            this.servicesDates[i]=servicesDates.get(i).getTime().toString();
+        this.servicesDates = new String[servicesDates.size()];
+        for (int i = 0; i < servicesDates.size(); i++) {
+            this.servicesDates[i] = servicesDates.get(i).getTime().toString();
         }
     }
 

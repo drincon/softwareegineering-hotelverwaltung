@@ -5,12 +5,16 @@
  */
 package com.mycompany.hotelverwaltung;
 
+import com.mycompany.hotelverwaltung.exceptions.CustomerHasReservationException;
+import com.mycompany.hotelverwaltung.exceptions.DepartureIsBeforeArrivalException;
 import com.mycompany.hotelverwaltung.persistence.RoomManager;
 import com.mycompany.hotelverwaltung.persistence.Service;
 import com.mycompany.hotelverwaltung.persistence.Room;
 import com.mycompany.hotelverwaltung.persistence.Customer;
 import com.mycompany.hotelverwaltung.persistence.Reservation;
 import com.mycompany.hotelverwaltung.exceptions.RoomNumberExistsException;
+import com.mycompany.hotelverwaltung.exceptions.ServiceAlreadyExistsException;
+import com.mycompany.hotelverwaltung.exceptions.ServiceDateIsNotDuringStayException;
 import com.mycompany.hotelverwaltung.persistence.RoomType;
 import static com.mycompany.hotelverwaltung.persistence.RoomType.DOUBLEROOM;
 import java.util.ArrayList;
@@ -63,9 +67,9 @@ public class RoomManagerTest extends TestCase {
         departure.set(2000, Calendar.JANUARY, 18);
         List<Service> list = new ArrayList<Service>();
         list.add(s);
-        List<Calendar> callist= new ArrayList<Calendar>();
+        List<Calendar> callist = new ArrayList<Calendar>();
         callist.add(arrival);
-        
+
         this.re = new Reservation(1, c, r, arrival, departure, list, callist);
         persistObject(re);
 
@@ -90,6 +94,87 @@ public class RoomManagerTest extends TestCase {
 
     }
 
+    public void testCustomerHasReservationException() throws Exception {
+        boolean b = false;
+        try {
+            rm.removeCustomer(c);
+        } catch (CustomerHasReservationException e) {
+            b = true;
+        }
+        if (!b) {
+            throw new Exception();
+        }
+    }
+
+    public void testServiceAlreadyExistsException() throws Exception {
+        boolean b = false;
+        try {
+            rm.addService(s.getName(), s.getPrice());
+        } catch (ServiceAlreadyExistsException e) {
+            b = true;
+        }
+
+        if (!b) {
+            throw new Exception();
+        }
+
+    }
+
+    public void testDepartureIsBeforeArrivalException() throws Exception {
+        boolean b = false;
+        try {
+            Calendar departuretest = Calendar.getInstance();
+            departuretest.set(1999, Calendar.JANUARY, 1);
+            Calendar arrival = Calendar.getInstance();
+            arrival.set(2000, Calendar.JANUARY, 16);
+
+            rm.addReservation(400, c, r, arrival, departuretest, null, null);
+
+        } catch (DepartureIsBeforeArrivalException e) {
+            b = true;
+        }
+
+        if (!b) {
+            throw new Exception();
+        }
+    }
+
+    public void testServiceDateIsNotDuringStayException() throws Exception {
+        boolean b = false;
+        try {
+            Calendar arrival = Calendar.getInstance();
+            arrival.set(2000, Calendar.JANUARY, 16);
+            Calendar departure = Calendar.getInstance();
+            departure.set(2000, Calendar.JANUARY, 18);
+            List<Service> list = new ArrayList<Service>();
+            list.add(s);
+            List<Calendar> callist = new ArrayList<Calendar>();
+            Calendar serviceDate = Calendar.getInstance();
+            serviceDate.set(2000, Calendar.FEBRUARY, 1);
+            callist.add(serviceDate);
+
+            rm.addReservation(500, c, r, arrival, departure, list, callist);
+        } catch (ServiceDateIsNotDuringStayException e) {
+            b = true;
+        }
+        if (!b) {
+            throw new Exception();
+        }
+    }
+
+    public void testRoomNumberExistsException() throws Exception {
+        boolean b = false;
+        try {
+            rm.addRoom("test", 1, DOUBLEROOM);
+
+        } catch (RoomNumberExistsException e) {
+            b = true;
+        }
+        if (!b) {
+            throw new Exception();
+        }
+    }
+
     public void testCalculatePrice() throws Exception {
         List<Service> list = new ArrayList();
         list.add(s);
@@ -98,7 +183,7 @@ public class RoomManagerTest extends TestCase {
             throw new Exception();
         }
         /*
-         TODO: kein schöner test^^
+         TODO: this one isn't nice
          */
     }
 
@@ -147,14 +232,6 @@ public class RoomManagerTest extends TestCase {
             throw new Exception();
         }
 
-        try {
-            // TODO : checken ob alle cases funktionieren
-            checkInDate.set(2000, Calendar.JANUARY, 17);
-
-        } catch (Exception e) {
-
-        }
-
     }
 
     public void testAddAndRemoveReservation() throws Exception {
@@ -174,12 +251,11 @@ public class RoomManagerTest extends TestCase {
 
         List<Service> list = new ArrayList();
         list.add(s2);
-        
+
         List<Calendar> servicesDate = new ArrayList<Calendar>();
-        Calendar dateForService= Calendar.getInstance();
-        dateForService.set(2000,Calendar.JANUARY,11);
+        Calendar dateForService = Calendar.getInstance();
+        dateForService.set(2000, Calendar.JANUARY, 11);
         servicesDate.add(dateForService);
-        
 
         rm.addReservation(1, c2, r2, arrival, departure, list, servicesDate);
         Reservation tmp = null;
@@ -258,7 +334,7 @@ public class RoomManagerTest extends TestCase {
     }
 
     public void testAddAndRemoveRoom() throws RoomNumberExistsException, Exception {
-        rm.addRoom("TestRoom2", 50, 2, RoomType.DOUBLEROOM);
+        rm.addRoom("TestRoom2", 2, RoomType.DOUBLEROOM);
         Room tmp = null;
         Iterator<Room> it = rm.getRoomList().iterator();
         boolean check = false;

@@ -5,6 +5,7 @@
  */
 package com.mycompany.hotelverwaltung.persistence;
 
+import com.mycompany.hotelverwaltung.exceptions.CustomerHasReservationException;
 import com.mycompany.hotelverwaltung.exceptions.DepartureIsBeforeArrivalException;
 import com.mycompany.hotelverwaltung.exceptions.RoomNumberExistsException;
 import com.mycompany.hotelverwaltung.exceptions.ServiceAlreadyExistsException;
@@ -13,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -45,6 +44,13 @@ public class RoomManager implements PersistenceInterface {
     public void addService(String name, int price) throws ServiceAlreadyExistsException {
         em.getTransaction().begin();
         Service s = new Service(name, price);
+        Iterator<Service> it = getServiceList().iterator();
+        while (it.hasNext()) {
+            Service s2 = it.next();
+            if (s2.getName().equals(s.getName()) && s.getPrice() == s2.getPrice()) {
+                throw new ServiceAlreadyExistsException();
+            }
+        }
         em.persist(s);
         em.getTransaction().commit();
     }
@@ -79,15 +85,21 @@ public class RoomManager implements PersistenceInterface {
      * adds Room to the persistence
      *
      * @param name name of the room
-     * @param price prive of the room
      * @param roomNumber number of the room
      * @param roomType type of the room
      * @throws RoomNumberExistsException
      */
     @Override
-    public void addRoom(String name, int price, int roomNumber, RoomType roomType) throws RoomNumberExistsException {
+    public void addRoom(String name, int roomNumber, RoomType roomType) throws RoomNumberExistsException {
         em.getTransaction().begin();
         Room r = new Room(name, roomNumber, roomType);
+        Iterator<Room> it = getRoomList().iterator();
+        while (it.hasNext()) {
+            Room r2 = it.next();
+            if (r.getRoomNumber() == r2.getRoomNumber()) {
+                throw new RoomNumberExistsException();
+            }
+        }
         em.persist(r);
         em.getTransaction().commit();
     }
@@ -151,19 +163,25 @@ public class RoomManager implements PersistenceInterface {
      * @param arrival date of arrival
      * @param departure date of departure
      * @param services booked services
+     * @param servicesDates
      * @throws DepartureIsBeforeArrivalException
+     * @throws com.mycompany.hotelverwaltung.exceptions.ServiceDateIsNotDuringStayException
      */
     @Override
     public void addReservation(int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services, List<Calendar> servicesDates) throws DepartureIsBeforeArrivalException, ServiceDateIsNotDuringStayException {
         em.getTransaction().begin();
         try {
-            for (int i = 0; i < servicesDates.size(); i++) {
-                if (dateIsInTimeframe(arrival, departure, servicesDates.get(i))) {
-                    throw new ServiceDateIsNotDuringStayException();
+            if (servicesDates == null) {
 
+            } else {
+                for (int i = 0; i < servicesDates.size(); i++) {
+                    if (dateIsInTimeframe(arrival, departure, servicesDates.get(i))) {
+                        throw new ServiceDateIsNotDuringStayException();
+
+                    }
                 }
             }
-        } catch ( ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
         }
         em.persist(new Reservation(reservationNumber, c, r, arrival, departure, services, servicesDates));
         em.getTransaction().commit();
@@ -249,7 +267,7 @@ public class RoomManager implements PersistenceInterface {
     }
 
     //untested
-    public void removeCustomer(int id) {
+    public void removeCustomer(int id) throws CustomerHasReservationException {
         em.getTransaction().begin();
         em.remove(em.find(Customer.class, id));
         em.getTransaction().commit();
@@ -259,10 +277,18 @@ public class RoomManager implements PersistenceInterface {
      * removes Customer from persistence
      *
      * @param c
+     * @throws com.mycompany.hotelverwaltung.exceptions.CustomerHasReservationException
      */
     @Override
-    public void removeCustomer(Customer c) {
+    public void removeCustomer(Customer c) throws CustomerHasReservationException {
         em.getTransaction().begin();
+        Iterator<Reservation> it= getReservationList().iterator();
+        while(it.hasNext()){
+            Reservation re=it.next();
+            if(re.getCustomer().equals(c)){
+                throw new CustomerHasReservationException();
+            }
+        }
         em.remove(em.find(Customer.class, c.getId()));
         em.getTransaction().commit();
     }
