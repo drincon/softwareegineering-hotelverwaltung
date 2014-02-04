@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Tue Feb 04 11:55:26 CET 2014:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.3.0 - (1405108): instance a816c00e-0143-fc89-cddc-000002b4dda0 
+Tue Feb 04 12:47:07 CET 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.3.0 - (1405108): instance a816c00e-0143-fcb9-1ebf-000003ad7a58 
 on database directory C:\Users\weiky\Documents\NetBeansProjects\softwareegineering-hotelverwaltung\target\testdb  with class loader sun.misc.Launcher$AppClassLoader@61316264 
 Loaded from file:/C:/Users/weiky/.m2/repository/org/apache/derby/derby/10.8.3.0/derby-10.8.3.0.jar
 java.vendor=Oracle Corporation

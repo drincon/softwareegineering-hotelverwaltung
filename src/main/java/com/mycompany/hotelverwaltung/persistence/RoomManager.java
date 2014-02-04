@@ -111,9 +111,10 @@ public class RoomManager implements PersistenceInterface {
      * @param checkOutDate checkoutdate
      * @param roomtype roomtype
      * @return list of all available rooms
+     * @throws com.mycompany.hotelverwaltung.exceptions.DepartureIsBeforeArrivalException
      */
     @Override
-    public List<Room> checkAvailability(Calendar checkInDate, Calendar checkOutDate, RoomType roomtype) {
+    public List<Room> checkAvailability(Calendar checkInDate, Calendar checkOutDate, RoomType roomtype) throws DepartureIsBeforeArrivalException{
         List<Reservation> reservations = getReservationList();
         Iterator<Reservation> it = reservations.iterator();
         List<Room> rooms = new ArrayList<Room>();

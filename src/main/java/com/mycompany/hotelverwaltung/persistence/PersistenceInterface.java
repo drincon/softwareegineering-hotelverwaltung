@@ -33,7 +33,7 @@ public interface PersistenceInterface {
     public void addReservation( int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services, List<Calendar> servicesDates) throws DepartureIsBeforeArrivalException,ServiceDateIsNotDuringStayException;
     public void removeReservation(int id);
     public void removeReservation(Reservation r);
-    public List<Room> checkAvailability(Calendar checkInDate, Calendar CheckOutDate, RoomType roomtype);
+    public List<Room> checkAvailability(Calendar checkInDate, Calendar CheckOutDate, RoomType roomtype) throws DepartureIsBeforeArrivalException;
     public Double calculatePrice(Calendar checkInDate, Calendar CheckOutDate, RoomType roomtype, List<Service> services)throws DepartureIsBeforeArrivalException ;
 
 }

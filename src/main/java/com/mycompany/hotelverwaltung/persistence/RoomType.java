@@ -21,6 +21,16 @@ public enum RoomType {
         this.value = value;
     }
 
+    private RoomType(String roomType) {
+        if (roomType.equals("DOUBLEROOM")) {
+            this.value = 100;
+        } else if (roomType.equals("SINGLEROOM")) {
+            this.value = 50;
+        } else {
+            this.value = 0;
+        }
+    }
+
     public int getValue() {
         return value;
     }
