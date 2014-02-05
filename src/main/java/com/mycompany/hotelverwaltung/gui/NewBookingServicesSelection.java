@@ -16,8 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
- * @author Eddybrando
+ * JFrame used to add a service to a reservation.
+ * @author Eddybrando, Felix Brass
  */
 public class NewBookingServicesSelection extends javax.swing.JFrame {
 
@@ -55,7 +55,7 @@ public class NewBookingServicesSelection extends javax.swing.JFrame {
         
         List<Service> availableServicesList = pi.getServiceList();
         Iterator<Service> it = availableServicesList.iterator();
-        String[] columnNames = {"Name", "Preis"};
+        String[] columnNames = {NAME, PREIS};
         Object[][] data = new Object[availableServicesList.size()][2];
 
         while (it.hasNext()) {
@@ -79,6 +79,8 @@ public class NewBookingServicesSelection extends javax.swing.JFrame {
         };
         jTable1.setModel(tableModel);
     }
+    public static final String PREIS = "Preis";
+    public static final String NAME = "Name";
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -256,7 +258,7 @@ public class NewBookingServicesSelection extends javax.swing.JFrame {
     private void FinishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FinishActionPerformed
 
         if (serviceDate.getDate() == null) {
-            String errorMessage = "Bitte Datum definieren.";
+            String errorMessage = BITTE__DATUM_DEFINIEREN;
             ErrorWindow s = new ErrorWindow(errorMessage);
             s.setVisible(true);
         } else {
@@ -270,7 +272,7 @@ public class NewBookingServicesSelection extends javax.swing.JFrame {
             Calendar cal1 = Calendar.getInstance();
             cal1.setTime(this.serviceDate.getDate());
             if (pi.dateIsNotInTimeframe(checkIn, checkOut, cal1)) {
-                ErrorWindow s = new ErrorWindow("Datum liegt nicht im Buchungszeitraum.");
+                ErrorWindow s = new ErrorWindow(DATUM_LIEGT_NICHT_IM__BUCHUNGSZEITRAUM);
                 s.setVisible(true);
             } else {
                 servicesDates.add(cal1);
@@ -283,6 +285,8 @@ public class NewBookingServicesSelection extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_FinishActionPerformed
+    public static final String DATUM_LIEGT_NICHT_IM__BUCHUNGSZEITRAUM = "Datum liegt nicht im Buchungszeitraum.";
+    public static final String BITTE__DATUM_DEFINIEREN = "Bitte Datum definieren.";
 
     /**
      * @param args the command line arguments

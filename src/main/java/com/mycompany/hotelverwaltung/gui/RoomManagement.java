@@ -8,8 +8,8 @@ package com.mycompany.hotelverwaltung.gui;
 import com.mycompany.hotelverwaltung.persistence.PersistenceInterface;
 
 /**
- *
- * @author Eddybrando
+ * JFrame used to select what you want to do in the roommanamgent.
+ * @author Eddybrando, Felix Brass
  */
 public class RoomManagement extends javax.swing.JFrame {
 

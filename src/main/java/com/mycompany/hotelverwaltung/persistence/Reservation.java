@@ -11,7 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+
 import java.util.List;
 import java.util.Locale;
 import javax.persistence.Column;
@@ -59,6 +59,7 @@ public class Reservation implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Calendar departure;
 
+    private static final String EE_MMM_DD_H_HMMSS_Z_YYYY = "EE MMM dd HH:mm:ss z yyyy";
     public Reservation() {
 
     }
@@ -130,7 +131,7 @@ public class Reservation implements Serializable {
 
     public List<Calendar> getServicesDates() throws ParseException {
         List<Calendar> list = new ArrayList<Calendar>();
-        SimpleDateFormat format1 = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy",Locale.ENGLISH);
+        SimpleDateFormat format1 = new SimpleDateFormat(EE_MMM_DD_H_HMMSS_Z_YYYY,Locale.ENGLISH);
         for (String servicesDate : servicesDates) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(format1.parse(servicesDate));
@@ -138,10 +139,11 @@ public class Reservation implements Serializable {
         }
         return list;
     }
+    
 
     public void setServicesDates(List<Calendar> servicesDates) {
         this.servicesDates = new String[servicesDates.size()];
-        SimpleDateFormat format1 = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy",Locale.ENGLISH);
+        SimpleDateFormat format1 = new SimpleDateFormat(EE_MMM_DD_H_HMMSS_Z_YYYY,Locale.ENGLISH);
         for (int i = 0; i < servicesDates.size(); i++) {
             this.servicesDates[i] = format1.format(servicesDates.get(i).getTime());
         }

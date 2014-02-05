@@ -11,8 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * JFrame used to show all Rooms
  *
- * @author Eddybrando
+ * @author Eddybrando, Felix Brass
  */
 public class RoomList extends javax.swing.JFrame {
 
@@ -22,6 +23,7 @@ public class RoomList extends javax.swing.JFrame {
 
     /**
      * Creates new form RoomList
+     *
      * @param pi
      * @param roomsList
      */
@@ -30,7 +32,7 @@ public class RoomList extends javax.swing.JFrame {
         this.pi = pi;
 
         Iterator<Room> it = roomsList.iterator();
-        String[] columnNames = {"Nummer", "Name", "Typ"};
+        String[] columnNames = {NUMMER, NAME, TYP};
         Object[][] data = new Object[roomsList.size()][3];
 
         while (it.hasNext()) {
@@ -49,8 +51,11 @@ public class RoomList extends javax.swing.JFrame {
             }
         };
         jTable1.setModel(tableModel);
-        
+
     }
+    public static final String TYP = "Typ";
+    public static final String NAME = "Name";
+    public static final String NUMMER = "Nummer";
 
     /**
      * This method is called from within the constructor to initialize the form.

@@ -11,8 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
- * @author Eddybrando
+ * JFrame used to list all Services.
+ * @author Eddybrando, Felix Brass
  */
 public class ServicesList extends javax.swing.JFrame {
 
@@ -28,7 +28,7 @@ public class ServicesList extends javax.swing.JFrame {
         List<Service> servicesList = pi.getServiceList();
         
         Iterator<Service> it = servicesList.iterator();
-        String[] columnNames = {"Name", "Preis"};
+        String[] columnNames = {NAME, PREIS};
         Object[][] data = new Object[servicesList.size()][2];
 
         while (it.hasNext()) {
@@ -47,6 +47,8 @@ public class ServicesList extends javax.swing.JFrame {
         };
         jTable1.setModel(tableModel);
     }
+    public static final String PREIS = "Preis";
+    public static final String NAME = "Name";
 
     /**
      * This method is called from within the constructor to initialize the form.

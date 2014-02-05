@@ -12,8 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
- * @author Eddybrando
+ * JFrame used to show all available rooms.
+ * @author Eddybrando, Felix Brass
  */
 public class NewBookingAvailabilities extends javax.swing.JFrame {
 
@@ -37,7 +37,7 @@ public class NewBookingAvailabilities extends javax.swing.JFrame {
         this.availableRoomsList = availableRoomsList;
 
         Iterator<Room> it = availableRoomsList.iterator();
-        String[] columnNames = {"Zimmernummer", "Name"};
+        String[] columnNames = {ZIMMERNUMMER, NAME};
         Object[][] data = new Object[availableRoomsList.size()][2];
 
         while (it.hasNext()) {
@@ -55,6 +55,8 @@ public class NewBookingAvailabilities extends javax.swing.JFrame {
         };
         jTable1.setModel(tableModel);
     }
+    private static final String NAME = "Name";
+    private static final String ZIMMERNUMMER = "Zimmernummer";
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -71,8 +73,8 @@ public class NewBookingAvailabilities extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         next = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        exitButton = new javax.swing.JButton();
+        back = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Verfügbare Zimmer - B&V Hotels");
@@ -150,19 +152,19 @@ public class NewBookingAvailabilities extends javax.swing.JFrame {
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
-        jButton2.setBackground(new java.awt.Color(187, 187, 187));
-        jButton2.setText("Beenden");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        exitButton.setBackground(new java.awt.Color(187, 187, 187));
+        exitButton.setText("Beenden");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                exitButtonActionPerformed(evt);
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(187, 187, 187));
-        jButton1.setText("« zurück");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        back.setBackground(new java.awt.Color(187, 187, 187));
+        back.setText("« zurück");
+        back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                backActionPerformed(evt);
             }
         });
 
@@ -173,9 +175,9 @@ public class NewBookingAvailabilities extends javax.swing.JFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(36, 36, 36)
-                .addComponent(jButton1)
+                .addComponent(back)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(exitButton)
                 .addGap(48, 48, 48))
         );
         layout.setVerticalGroup(
@@ -184,8 +186,8 @@ public class NewBookingAvailabilities extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(back)
+                    .addComponent(exitButton))
                 .addContainerGap())
         );
 
@@ -193,15 +195,15 @@ public class NewBookingAvailabilities extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_exitButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         dispose();
         StartWindow s = new StartWindow(pi);
         s.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_backActionPerformed
 
     private void nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextActionPerformed
         try {
@@ -245,8 +247,8 @@ public class NewBookingAvailabilities extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton back;
+    private javax.swing.JButton exitButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

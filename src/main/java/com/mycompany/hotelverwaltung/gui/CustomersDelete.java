@@ -14,14 +14,15 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
- * @author Eddybrando
+ * JFrame used to select a Customer and delete it.
+ * @author Eddybrando, Felix Brass
  */
 public class CustomersDelete extends javax.swing.JFrame {
 
     private List<String> customersList;
     private PersistenceInterface pi;
     private javax.swing.JList namesOfCustomer;
+    private static final String ERROR_WINDOW="Kunde hat noch offene Buchungen";
 
     /**
      * Creates new form CustomersDelete
@@ -33,9 +34,10 @@ public class CustomersDelete extends javax.swing.JFrame {
         this.pi = pi;
 
         Iterator<Customer> it = customersList.iterator();
-        String[] columnNames = {"ID", "Anrede", "Vorname", "Nachname", "Geburtstag", "Straße & Nr.", "PLZ", "Stadt", "Land"};
+        String[] columnNames = {ID, ANREDE, VORNAME, NACHNAME, GEBURTSTAG, STRAßE___NR, PLZ, STADT, LAND};
         Object[][] data = new Object[customersList.size()][9];
 
+        // fills JTable with data
         while (it.hasNext()) {
             Customer c = it.next();
             data[customersList.indexOf(c)][0] = c.getId();
@@ -43,7 +45,7 @@ public class CustomersDelete extends javax.swing.JFrame {
             data[customersList.indexOf(c)][2] = c.getSurname();
             data[customersList.indexOf(c)][3] = c.getName();
             Calendar cal = c.getBirthday();
-            SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy");
+            SimpleDateFormat format1 = new SimpleDateFormat(DD_M_MYYYY);
             String formatted = format1.format(cal.getTime());
             data[customersList.indexOf(c)][4] = formatted;
             //data[customersList.indexOf(c)][3] = c.getBirthday().getTime().toString();
@@ -62,6 +64,16 @@ public class CustomersDelete extends javax.swing.JFrame {
         };
         jTable1.setModel(tableModel);
     }
+    private static final String DD_M_MYYYY = "dd.MM.yyyy";
+    private static final String LAND = "Land";
+    private static final String STADT = "Stadt";
+    private static final String PLZ = "PLZ";
+    private static final String STRAßE___NR = "Straße & Nr.";
+    private static final String GEBURTSTAG = "Geburtstag";
+    private static final String NACHNAME = "Nachname";
+    private static final String VORNAME = "Vorname";
+    private static final String ANREDE = "Anrede";
+    private static final String ID = "ID";
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -75,11 +87,11 @@ public class CustomersDelete extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        delete = new javax.swing.JButton();
+        deleteCustomer = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        exitButton = new javax.swing.JButton();
+        back = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Kunde löschen - B&V Hotels");
@@ -110,14 +122,14 @@ public class CustomersDelete extends javax.swing.JFrame {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        delete.setBackground(new java.awt.Color(255, 255, 255));
-        delete.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        delete.setForeground(new java.awt.Color(22, 76, 136));
-        delete.setText("Löschen");
-        delete.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        delete.addActionListener(new java.awt.event.ActionListener() {
+        deleteCustomer.setBackground(new java.awt.Color(255, 255, 255));
+        deleteCustomer.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        deleteCustomer.setForeground(new java.awt.Color(22, 76, 136));
+        deleteCustomer.setText("Löschen");
+        deleteCustomer.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        deleteCustomer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteActionPerformed(evt);
+                deleteCustomerActionPerformed(evt);
             }
         });
 
@@ -142,7 +154,7 @@ public class CustomersDelete extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 771, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
@@ -153,23 +165,23 @@ public class CustomersDelete extends javax.swing.JFrame {
                 .addGap(43, 43, 43)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(deleteCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton3.setBackground(new java.awt.Color(187, 187, 187));
-        jButton3.setText("Beenden");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        exitButton.setBackground(new java.awt.Color(187, 187, 187));
+        exitButton.setText("Beenden");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                exitButtonActionPerformed(evt);
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(187, 187, 187));
-        jButton2.setText("« zurück");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        back.setBackground(new java.awt.Color(187, 187, 187));
+        back.setText("« zurück");
+        back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                backActionPerformed(evt);
             }
         });
 
@@ -182,9 +194,9 @@ public class CustomersDelete extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(jButton2)
+                .addComponent(back)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(exitButton)
                 .addGap(40, 40, 40))
         );
         layout.setVerticalGroup(
@@ -193,8 +205,8 @@ public class CustomersDelete extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2))
+                    .addComponent(exitButton)
+                    .addComponent(back))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -202,7 +214,11 @@ public class CustomersDelete extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+    /**
+     * gets ID from selected row and deletes Customer
+     * @param evt 
+     */
+    private void deleteCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCustomerActionPerformed
         int position = jTable1.getSelectedRow();
         long id = (Long) jTable1.getValueAt(position, 0);
         Iterator<Customer> it = pi.getCustomerList().iterator();
@@ -213,7 +229,7 @@ public class CustomersDelete extends javax.swing.JFrame {
                 try {
                     pi.removeCustomer(c);
                 } catch (CustomerHasReservationException ex) {
-                    ErrorWindow s = new ErrorWindow("Kunde hat noch offene Buchungen");
+                    ErrorWindow s = new ErrorWindow(ERROR_WINDOW);
                     s.setVisible(true);
                 }
             }
@@ -222,17 +238,17 @@ public class CustomersDelete extends javax.swing.JFrame {
         CustomersManagement s = new CustomersManagement(pi);
         s.setVisible(true);
 
-    }//GEN-LAST:event_deleteActionPerformed
+    }//GEN-LAST:event_deleteCustomerActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         dispose();
         CustomersManagement s = new CustomersManagement(pi);
         s.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_backActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_exitButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -264,9 +280,9 @@ public class CustomersDelete extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton delete;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton back;
+    private javax.swing.JButton deleteCustomer;
+    private javax.swing.JButton exitButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

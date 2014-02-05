@@ -14,13 +14,14 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
- * @author Eddybrando
+ *  JFrame used to edit a Customer.
+ * @author Eddybrando, Felix Brass
  */
 public class CustomersEdit extends javax.swing.JFrame {
 
     private final PersistenceInterface pi;
     private final String[] columnNames;
+    private static final String WRONG_CALENDAR_FORMAT="Geburtstag muss im Format: tt.MM.jjjj sein";
 
     /**
      * Creates new form CustomersEdit
@@ -31,17 +32,18 @@ public class CustomersEdit extends javax.swing.JFrame {
 
         List<Customer> customersList = pi.getCustomerList();
         Iterator<Customer> it = customersList.iterator();
-        String[] columnNames2 = {"Anrede", "Vorname", "Nachname", "Geburtstag", "Straße & Nr.", "PLZ", "Stadt", "Land"};
+        String[] columnNames2 = {ANREDE, VORNAME, NACHNAME, GEBURTSTAG, STRAßE___NR, PLZ, STADT, LAND};
         this.columnNames = columnNames2;
         Object[][] data = new Object[customersList.size()][8];
 
+        //fills JTable with data
         while (it.hasNext()) {
             Customer c = it.next();
             data[customersList.indexOf(c)][0] = c.getAdress();
             data[customersList.indexOf(c)][1] = c.getSurname();
             data[customersList.indexOf(c)][2] = c.getName();
             Calendar cal = c.getBirthday();
-            SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy");
+            SimpleDateFormat format1 = new SimpleDateFormat(DD_M_MYYYY);
             String formatted = format1.format(cal.getTime());
             data[customersList.indexOf(c)][3] = formatted;
             data[customersList.indexOf(c)][4] = c.getStreetnumber();
@@ -55,6 +57,15 @@ public class CustomersEdit extends javax.swing.JFrame {
         jTable1.setModel(new javax.swing.table.DefaultTableModel(data, columnNames2));
 
     }
+    private static final String DD_M_MYYYY = "dd.MM.yyyy";
+    private static final String LAND = "Land";
+    private static final String STADT = "Stadt";
+    private static final String PLZ = "PLZ";
+    private static final String STRAßE___NR = "Straße & Nr.";
+    private static final String GEBURTSTAG = "Geburtstag";
+    private static final String NACHNAME = "Nachname";
+    private static final String VORNAME = "Vorname";
+    private static final String ANREDE = "Anrede";
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -71,8 +82,8 @@ public class CustomersEdit extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         editCustomer = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        exitButton = new javax.swing.JButton();
+        back = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Kundendaten ändern - B&V Hotels");
@@ -150,19 +161,19 @@ public class CustomersEdit extends javax.swing.JFrame {
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
-        jButton2.setBackground(new java.awt.Color(187, 187, 187));
-        jButton2.setText("Beenden");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        exitButton.setBackground(new java.awt.Color(187, 187, 187));
+        exitButton.setText("Beenden");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                exitButtonActionPerformed(evt);
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(187, 187, 187));
-        jButton1.setText("« zurück");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        back.setBackground(new java.awt.Color(187, 187, 187));
+        back.setText("« zurück");
+        back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                backActionPerformed(evt);
             }
         });
 
@@ -172,9 +183,9 @@ public class CustomersEdit extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addComponent(jButton1)
+                .addComponent(back)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(exitButton)
                 .addGap(41, 41, 41))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -184,8 +195,8 @@ public class CustomersEdit extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(back)
+                    .addComponent(exitButton))
                 .addContainerGap())
         );
 
@@ -193,16 +204,20 @@ public class CustomersEdit extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_exitButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         dispose();
         CustomersManagement s = new CustomersManagement(pi);
         s.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_backActionPerformed
 
+    /**
+     * sets every Value for every Customer new.
+     * @param evt 
+     */
     private void editCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editCustomerActionPerformed
 
         int currentRow = 0;
@@ -216,7 +231,7 @@ public class CustomersEdit extends javax.swing.JFrame {
                 c.setAdress((String) jTable1.getValueAt(currentRow, 0));
                 c.setSurname((String) jTable1.getValueAt(currentRow, 1));
                 c.setName((String) jTable1.getValueAt(currentRow, 2));
-                SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy");
+                SimpleDateFormat format1 = new SimpleDateFormat(DD_M_MYYYY1);
                 Calendar cal1 = Calendar.getInstance();
                 cal1.setTime(format1.parse((String) jTable1.getValueAt(currentRow, 3)));
                 c.setBirthday(cal1);
@@ -226,13 +241,14 @@ public class CustomersEdit extends javax.swing.JFrame {
                 c.setCountry((String) jTable1.getValueAt(currentRow, 7));
                 pi.updateCustomer(c.getId(), c.getName(), c.getSurname(), c.getAdress(), c.getStreetnumber(), c.getZipcode(), c.getCity(), c.getCountry(), c.getBirthday());
             } catch (ParseException ex) {
-                ErrorWindow s = new ErrorWindow("Geburtstag muss im Format: tt.MM.jjjj sein");
+                ErrorWindow s = new ErrorWindow(WRONG_CALENDAR_FORMAT);
             }
         }
         dispose();
         CustomersList s = new CustomersList(pi);
         s.setVisible(true);
     }//GEN-LAST:event_editCustomerActionPerformed
+    private static final String DD_M_MYYYY1 = "dd.MM.yyyy";
 
     /**
      * @param args the command line arguments
@@ -269,9 +285,9 @@ public class CustomersEdit extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back;
     private javax.swing.JButton editCustomer;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton exitButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

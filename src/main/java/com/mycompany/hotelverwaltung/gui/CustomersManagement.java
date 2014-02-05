@@ -9,8 +9,8 @@ package com.mycompany.hotelverwaltung.gui;
 import com.mycompany.hotelverwaltung.persistence.PersistenceInterface;
 
 /**
- *
- * @author Eddybrando
+ * JFrame used to select a customer option.
+ * @author Eddybrando, Felix Brass
  */
 public class CustomersManagement extends javax.swing.JFrame {
 
@@ -40,8 +40,8 @@ public class CustomersManagement extends javax.swing.JFrame {
         deleteCustomerButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        exitButton = new javax.swing.JButton();
+        back = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Kundenverwaltung - B&V Hotels");
@@ -149,19 +149,19 @@ public class CustomersManagement extends javax.swing.JFrame {
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
-        jButton6.setBackground(new java.awt.Color(187, 187, 187));
-        jButton6.setText("Beenden");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        exitButton.setBackground(new java.awt.Color(187, 187, 187));
+        exitButton.setText("Beenden");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                exitButtonActionPerformed(evt);
             }
         });
 
-        jButton5.setBackground(new java.awt.Color(187, 187, 187));
-        jButton5.setText("« zurück");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        back.setBackground(new java.awt.Color(187, 187, 187));
+        back.setText("« zurück");
+        back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                backActionPerformed(evt);
             }
         });
 
@@ -171,9 +171,9 @@ public class CustomersManagement extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(35, 35, 35)
-                .addComponent(jButton5)
+                .addComponent(back)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton6)
+                .addComponent(exitButton)
                 .addGap(35, 35, 35))
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -183,8 +183,8 @@ public class CustomersManagement extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(exitButton)
+                    .addComponent(back, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         setSize(new java.awt.Dimension(409, 351));
@@ -197,15 +197,15 @@ public class CustomersManagement extends javax.swing.JFrame {
         s.setVisible(true);
     }//GEN-LAST:event_listAllButtonActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         dispose();
         StartWindow s = new StartWindow(pi);
         s.setVisible(true);
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_backActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_exitButtonActionPerformed
 
     private void newCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCustomerButtonActionPerformed
         dispose();
@@ -255,10 +255,10 @@ public class CustomersManagement extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back;
     private javax.swing.JButton deleteCustomerButton;
     private javax.swing.JButton editCustomerButton;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JButton exitButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

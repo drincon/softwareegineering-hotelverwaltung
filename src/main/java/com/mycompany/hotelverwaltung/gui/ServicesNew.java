@@ -11,8 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Eddybrando
+ * JFrame used to add a service.
+ * @author Eddybrando, Felix Brass
  */
 public class ServicesNew extends javax.swing.JFrame {
 
@@ -187,20 +187,23 @@ public class ServicesNew extends javax.swing.JFrame {
         boolean check = true;
 
         if ("".equals(serviceName.getText())) {
-            String errorMessage = "Bitte Name eingeben.";
+            String errorMessage = BITTE__NAME_EINGEBEN;
             ErrorWindow s = new ErrorWindow(errorMessage);
             s.setVisible(true);
         } else if ("".equals(servicePrice.getText())) {
-            String errorMessage = "Bitte Preis eingeben.";
+            String errorMessage = BITTE__PREIS_EINGEBEN;
             ErrorWindow s = new ErrorWindow(errorMessage);
             s.setVisible(true);
         } else {
 
             try {
-                Integer.parseInt(servicePrice.getText());
+                int i=Integer.parseInt(servicePrice.getText());
+                if(i<0){
+                    throw new NumberFormatException();
+                }
             } catch (NumberFormatException e) {
                 check = false;
-                ErrorWindow s = new ErrorWindow("Bitte gültiger Preis eingeben.");
+                ErrorWindow s = new ErrorWindow(BITTE_GÜLTIGER__PREIS_EINGEBEN);
                 s.setVisible(true);
             }
 
@@ -218,6 +221,9 @@ public class ServicesNew extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_jButton1ActionPerformed
+    public static final String BITTE_GÜLTIGER__PREIS_EINGEBEN = "Bitte gültiger Preis eingeben.";
+    public static final String BITTE__PREIS_EINGEBEN = "Bitte Preis eingeben.";
+    public static final String BITTE__NAME_EINGEBEN = "Bitte Name eingeben.";
 
     /**
      * @param args the command line arguments

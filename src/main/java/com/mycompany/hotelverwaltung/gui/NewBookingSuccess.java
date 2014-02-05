@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Random;
 
 /**
- *
- * @author Eddybrando
+ * JFrame used to show the booking that will be added.
+ * @author Eddybrando, Felix Brass
  */
 public class NewBookingSuccess extends javax.swing.JFrame {
 
@@ -54,7 +54,7 @@ public class NewBookingSuccess extends javax.swing.JFrame {
 
         initComponents();
         AnredeNameNachname.setText(customer.getAdress() + " " + customer.getName() + " " + customer.getSurname());
-        SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat format1 = new SimpleDateFormat(DD_M_MYYYY);
         CheckOutDate.setText(format1.format(checkOut.getTime()));
         Land.setText(customer.getCountry());
         RoomNumber.setText(Integer.toString(room.getRoomNumber()));
@@ -78,6 +78,7 @@ public class NewBookingSuccess extends javax.swing.JFrame {
         }
         price.setText(String.valueOf(d));
     }
+    public static final String DD_M_MYYYY = "dd.MM.yyyy";
 
     /**
      * This method is called from within the constructor to initialize the form.

@@ -15,8 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Eddybrando
+ * JFrame used to cancel a booking
+ * @author Eddybrando, Felix Brass
  */
 public class BookingsCancel extends javax.swing.JFrame {
 
@@ -33,12 +33,13 @@ public class BookingsCancel extends javax.swing.JFrame {
         this.pi = pi;
 
         Iterator<Reservation> it = reservationsList.iterator();
-        String[] columnNames = {"Buchungsnummer", "Kunde", "Arrival", "Departure", "Room", "Services"};
+        String[] columnNames = {BUCHUNGSNUMMER, KUNDE, ARRIVAL, DEPARTURE, ROOM, SERVICES};
         Object[][] data = new Object[reservationsList.size()][7];
 
+        //fills JTable with data
         while (it.hasNext()) {
             Reservation reservationNumber = it.next();
-            SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy");
+            SimpleDateFormat format1 = new SimpleDateFormat(DD_M_MYYYY);
             data[reservationsList.indexOf(reservationNumber)][0] = reservationNumber.getReservationNumber();
             data[reservationsList.indexOf(reservationNumber)][1] = reservationNumber.getCustomer().getName();
             data[reservationsList.indexOf(reservationNumber)][2] = format1.format(reservationNumber.getArrival().getTime());
@@ -58,6 +59,13 @@ public class BookingsCancel extends javax.swing.JFrame {
         };
         jTable1.setModel(tableModel);
     }
+    private static final String SERVICES = "Services";
+    private static final String ROOM = "Room";
+    private static final String DD_M_MYYYY = "dd.MM.yyyy";
+    private static final String DEPARTURE = "Departure";
+    private static final String ARRIVAL = "Arrival";
+    private static final String KUNDE = "Kunde";
+    private static final String BUCHUNGSNUMMER = "Buchungsnummer";
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -68,12 +76,12 @@ public class BookingsCancel extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        exitButton = new javax.swing.JButton();
+        back = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        CancelBooking = new javax.swing.JButton();
+        cancelBooking = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
@@ -81,19 +89,19 @@ public class BookingsCancel extends javax.swing.JFrame {
         setTitle("Buchung stornieren - B&V Hotels");
         setResizable(false);
 
-        jButton2.setBackground(new java.awt.Color(187, 187, 187));
-        jButton2.setText("Beenden");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        exitButton.setBackground(new java.awt.Color(187, 187, 187));
+        exitButton.setText("Beenden");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                exitButtonActionPerformed(evt);
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(187, 187, 187));
-        jButton1.setText("« zurück");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        back.setBackground(new java.awt.Color(187, 187, 187));
+        back.setText("« zurück");
+        back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                backActionPerformed(evt);
             }
         });
 
@@ -122,14 +130,14 @@ public class BookingsCancel extends javax.swing.JFrame {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        CancelBooking.setBackground(new java.awt.Color(255, 255, 255));
-        CancelBooking.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        CancelBooking.setForeground(new java.awt.Color(22, 76, 136));
-        CancelBooking.setText("Stornieren");
-        CancelBooking.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        CancelBooking.addActionListener(new java.awt.event.ActionListener() {
+        cancelBooking.setBackground(new java.awt.Color(255, 255, 255));
+        cancelBooking.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        cancelBooking.setForeground(new java.awt.Color(22, 76, 136));
+        cancelBooking.setText("Stornieren");
+        cancelBooking.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        cancelBooking.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CancelBookingActionPerformed(evt);
+                cancelBookingActionPerformed(evt);
             }
         });
 
@@ -154,7 +162,7 @@ public class BookingsCancel extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(42, 42, 42)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(CancelBooking, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancelBooking, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 772, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
@@ -165,7 +173,7 @@ public class BookingsCancel extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(CancelBooking, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cancelBooking, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -175,9 +183,9 @@ public class BookingsCancel extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addComponent(jButton1)
+                .addComponent(back)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(exitButton)
                 .addGap(45, 45, 45))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -187,26 +195,33 @@ public class BookingsCancel extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(exitButton)
+                    .addComponent(back))
                 .addGap(0, 15, Short.MAX_VALUE))
         );
 
         setSize(new java.awt.Dimension(868, 502));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    /**
+     * Exits application.
+     * @param evt
+     */
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_exitButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         dispose();
         BookingsManagement s = new BookingsManagement(pi);
         s.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_backActionPerformed
 
-    private void CancelBookingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelBookingActionPerformed
+    /**
+     * Cancel a Reservation.
+     * @param evt 
+     */
+    private void cancelBookingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBookingActionPerformed
         try {
             pi.removeReservation(pi.getReservationList().get(jTable1.getSelectedRow()));
             dispose();
@@ -217,7 +232,7 @@ public class BookingsCancel extends javax.swing.JFrame {
             } catch (ParseException ex) {
                 Logger.getLogger(BookingsManagement.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         } catch (NullPointerException e) {
             dispose();
             BookingsCancel s;
@@ -228,7 +243,7 @@ public class BookingsCancel extends javax.swing.JFrame {
                 Logger.getLogger(BookingsCancel.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        }catch (ArrayIndexOutOfBoundsException e) {
+        } catch (ArrayIndexOutOfBoundsException e) {
             dispose();
             BookingsCancel s;
             try {
@@ -239,7 +254,7 @@ public class BookingsCancel extends javax.swing.JFrame {
             }
 
         }
-    }//GEN-LAST:event_CancelBookingActionPerformed
+    }//GEN-LAST:event_cancelBookingActionPerformed
 
     /**
      * @param args the command line arguments
@@ -271,9 +286,9 @@ public class BookingsCancel extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton CancelBooking;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton back;
+    private javax.swing.JButton cancelBooking;
+    private javax.swing.JButton exitButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

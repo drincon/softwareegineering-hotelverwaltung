@@ -13,8 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
- * @author Eddybrando
+ *  JFrame that shows all Bookings
+ * @author Eddybrando, Felix Brass
  */
 public class BookingsList extends javax.swing.JFrame {
 
@@ -30,12 +30,13 @@ public class BookingsList extends javax.swing.JFrame {
         this.pi = pi;
 
         Iterator<Reservation> it = reservationsList.iterator();
-        String[] columnNames = {"Buchungsnummer", "Kunde", "Arrival", "Departure", "Room", "Services"};
+        String[] columnNames = {BUCHUNGSNUMMER, KUNDE, ARRIVAL, DEPARTURE, ROOM, SERVICES};
         Object[][] data = new Object[reservationsList.size()][7];
 
+        // fills JTable with data
         while (it.hasNext()) {
             Reservation reservationNumber = it.next();
-            SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy");
+            SimpleDateFormat format1 = new SimpleDateFormat(DD_M_MYYYY);
             data[reservationsList.indexOf(reservationNumber)][0] = reservationNumber.getReservationNumber();
             data[reservationsList.indexOf(reservationNumber)][1] = reservationNumber.getCustomer().getName();
             data[reservationsList.indexOf(reservationNumber)][2] = format1.format(reservationNumber.getArrival().getTime());
@@ -55,6 +56,13 @@ public class BookingsList extends javax.swing.JFrame {
         };
         jTable1.setModel(tableModel);
     }
+    private static final String SERVICES = "Services";
+    private static final String ROOM = "Room";
+    private static final String DEPARTURE = "Departure";
+    private static final String ARRIVAL = "Arrival";
+    private static final String KUNDE = "Kunde";
+    private static final String DD_M_MYYYY = "dd.MM.yyyy";
+    private static final String BUCHUNGSNUMMER = "Buchungsnummer";
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -70,8 +78,8 @@ public class BookingsList extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        exitButton = new javax.swing.JButton();
+        back = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Hotelbuchungen - B&V Hotels");
@@ -134,19 +142,19 @@ public class BookingsList extends javax.swing.JFrame {
                 .addContainerGap(39, Short.MAX_VALUE))
         );
 
-        jButton2.setBackground(new java.awt.Color(187, 187, 187));
-        jButton2.setText("Beenden");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        exitButton.setBackground(new java.awt.Color(187, 187, 187));
+        exitButton.setText("Beenden");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                exitButtonActionPerformed(evt);
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(187, 187, 187));
-        jButton1.setText("« zurück");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        back.setBackground(new java.awt.Color(187, 187, 187));
+        back.setText("« zurück");
+        back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                backActionPerformed(evt);
             }
         });
 
@@ -156,9 +164,9 @@ public class BookingsList extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(37, 37, 37)
-                .addComponent(jButton1)
+                .addComponent(back)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(exitButton)
                 .addGap(44, 44, 44))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -168,24 +176,28 @@ public class BookingsList extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(back)
+                    .addComponent(exitButton))
                 .addGap(23, 23, 23))
         );
 
         setSize(new java.awt.Dimension(868, 461));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    /**
+     * Exits application.
+     * @param evt
+     */
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_exitButtonActionPerformed
+    
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         dispose();
         BookingsManagement s = new BookingsManagement(pi);
         s.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_backActionPerformed
 
     /**
      * @param args the command line arguments
@@ -217,8 +229,8 @@ public class BookingsList extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton back;
+    private javax.swing.JButton exitButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

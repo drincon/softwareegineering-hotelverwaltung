@@ -227,8 +227,9 @@ public class RoomManager implements PersistenceInterface {
      */
     @Override
     public List<Reservation> getReservationList() {
-        return em.createQuery("Select re from Reservation re").getResultList();
+        return em.createQuery(SELECT_RE_FROM__RESERVATION_RE).getResultList();
     }
+    public static final String SELECT_RE_FROM__RESERVATION_RE = "Select re from Reservation re";
 
     /**
      * gets list with all customers
@@ -237,8 +238,9 @@ public class RoomManager implements PersistenceInterface {
      */
     @Override
     public List<Customer> getCustomerList() {
-        return em.createQuery("Select c from Customer c").getResultList();
+        return em.createQuery(SELECT_C_FROM__CUSTOMER_C).getResultList();
     }
+    public static final String SELECT_C_FROM__CUSTOMER_C = "Select c from Customer c";
 
     /**
      * gets list with all Rooms
@@ -247,8 +249,9 @@ public class RoomManager implements PersistenceInterface {
      */
     @Override
     public List<Room> getRoomList() {
-        return em.createQuery("Select r from Room r").getResultList();
+        return em.createQuery(SELECT_R_FROM__ROOM_R).getResultList();
     }
+    public static final String SELECT_R_FROM__ROOM_R = "Select r from Room r";
 
     /**
      * gets list with all services
@@ -257,8 +260,9 @@ public class RoomManager implements PersistenceInterface {
      */
     @Override
     public List<Service> getServiceList() {
-        return em.createQuery("Select s from Service s").getResultList();
+        return em.createQuery(SELECT_S_FROM__SERVICE_S).getResultList();
     }
+    public static final String SELECT_S_FROM__SERVICE_S = "Select s from Service s";
 
     /**
      * adds customer to the persistence
@@ -385,6 +389,7 @@ public class RoomManager implements PersistenceInterface {
      * @param date date to check
      * @return
      */
+    @Override
     public boolean dateIsNotInTimeframe(Calendar begin, Calendar end, Calendar date) {
         long l1= begin.getTimeInMillis();
         long endl= end.getTimeInMillis();

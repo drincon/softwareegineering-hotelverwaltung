@@ -8,8 +8,8 @@ package com.mycompany.hotelverwaltung.gui;
 import com.mycompany.hotelverwaltung.persistence.PersistenceInterface;
 
 /**
- *
- * @author Eddybrando
+ * JFrame used to select what to to in the service management.
+ * @author Eddybrando, Felix Brass
  */
 public class ServicesManagement extends javax.swing.JFrame {
 

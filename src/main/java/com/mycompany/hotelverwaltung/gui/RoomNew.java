@@ -12,8 +12,8 @@ import static com.mycompany.hotelverwaltung.persistence.RoomType.DOUBLEROOM;
 import static com.mycompany.hotelverwaltung.persistence.RoomType.SINGLEROOM;
 
 /**
- *
- * @author Eddybrando
+ * JFrame used to add a Room.
+ * @author Eddybrando, Felix Brass
  */
 public class RoomNew extends javax.swing.JFrame {
 
@@ -195,12 +195,12 @@ public class RoomNew extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        if ("".equals(nameTextField.getText())) {
-            String errorMessage = "Bitte Zimmername eingeben.";
+        if (EMPTY_STRING.equals(nameTextField.getText())) {
+            String errorMessage = BITTE__ZIMMERNAME_EINGEBEN;
             ErrorWindow s = new ErrorWindow(errorMessage);
             s.setVisible(true);
-        } else if ("".equals(numberTextField.getText())) {
-            String errorMessage = "Bitte Zimmernummer eingeben.";
+        } else if (EMPTY_STRING.equals(numberTextField.getText())) {
+            String errorMessage = BITTE__ZIMMERNUMMER_EINGEBEN;
             ErrorWindow s = new ErrorWindow(errorMessage);
             s.setVisible(true);
         } else {
@@ -212,19 +212,19 @@ public class RoomNew extends javax.swing.JFrame {
 
                 int number = Integer.parseInt(numberTextField.getText());
                 RoomType type = DOUBLEROOM;
-                if ("Einzelzimmer".equals(typeComboBox.getSelectedItem().toString())) {
+                if (EINZELZIMMER.equals(typeComboBox.getSelectedItem().toString())) {
                     type = SINGLEROOM;
                 }
 
                 pi.addRoom(name,i , type);
             } catch (NumberFormatException e) {
                 check = false;
-                String errorMessage = "Bitte eine gültige Nummer eingeben.";
+                String errorMessage = BITTE_EINE_GÜLTIGE__NUMMER_EINGEBEN;
                 ErrorWindow s = new ErrorWindow(errorMessage);
                 s.setVisible(true);
             } catch (RoomNumberExistsException e) {
                 check = false;
-                String errorMessage = "Zimmernummer existiert bereits.";
+                String errorMessage = ZIMMERNUMMER_EXISTIERT_BEREITS;
                 ErrorWindow s = new ErrorWindow(errorMessage);
                 s.setVisible(true);
 
@@ -237,6 +237,12 @@ public class RoomNew extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_jButton3ActionPerformed
+    public static final String EMPTY_STRING = "";
+    public static final String ZIMMERNUMMER_EXISTIERT_BEREITS = "Zimmernummer existiert bereits.";
+    public static final String BITTE_EINE_GÜLTIGE__NUMMER_EINGEBEN = "Bitte eine gültige Nummer eingeben.";
+    public static final String EINZELZIMMER = "Einzelzimmer";
+    public static final String BITTE__ZIMMERNUMMER_EINGEBEN = "Bitte Zimmernummer eingeben.";
+    public static final String BITTE__ZIMMERNAME_EINGEBEN = "Bitte Zimmername eingeben.";
 
     /**
      * @param args the command line arguments

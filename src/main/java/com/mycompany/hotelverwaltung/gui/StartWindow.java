@@ -13,8 +13,8 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- *
- * @author Eddybrando
+ * JFrame used to select want to do in the management software.
+ * @author Eddybrando, Felix Brass
  */
 public class StartWindow extends javax.swing.JFrame {
 
@@ -318,7 +318,7 @@ public class StartWindow extends javax.swing.JFrame {
     private void bookingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookingButtonActionPerformed
         List<Room> rooms = null;
         if (checkInDate.getDate() == null || checkOutDate.getDate() == null) {
-            String errorMessage = "Bitte Anreise- und Abreisedatum definieren.";
+            String errorMessage = BITTE__ANREISE_UND__ABREISEDATUM_DEFINIEREN;
             ErrorWindow s = new ErrorWindow(errorMessage);
             s.setVisible(true);
         } else {
@@ -330,7 +330,7 @@ public class StartWindow extends javax.swing.JFrame {
             checkOut.setTime(checkOutDate.getDate());
             RoomType roomType = null;
 
-            if (this.roomtypeComboBox.getSelectedItem().equals("Einzelzimmer")) {
+            if (this.roomtypeComboBox.getSelectedItem().equals(EINZELZIMMER)) {
                 roomType = RoomType.SINGLEROOM;
             } else {
                 roomType = RoomType.DOUBLEROOM;
@@ -340,9 +340,8 @@ public class StartWindow extends javax.swing.JFrame {
                 rooms = pi.checkAvailability(checkIn, checkOut, roomType);
             } catch (DepartureIsBeforeArrivalException ex) {
                 check = false;
-                ErrorWindow s = new ErrorWindow("Abreise darf nicht vor Anreise sein.");
+                ErrorWindow s = new ErrorWindow(ABREISE_DARF_NICHT_VOR__ANREISE_SEIN);
                 s.setVisible(true);
-                System.out.println("testtesttest");
             }
 
             if (check) {
@@ -353,6 +352,9 @@ public class StartWindow extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_bookingButtonActionPerformed
+    public static final String ABREISE_DARF_NICHT_VOR__ANREISE_SEIN = "Abreise darf nicht vor Anreise sein.";
+    public static final String EINZELZIMMER = "Einzelzimmer";
+    public static final String BITTE__ANREISE_UND__ABREISEDATUM_DEFINIEREN = "Bitte Anreise- und Abreisedatum definieren.";
 
     private void checkInDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkInDateActionPerformed
         // TODO add your handling code here:

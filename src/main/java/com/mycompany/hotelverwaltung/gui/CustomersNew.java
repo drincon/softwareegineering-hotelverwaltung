@@ -9,12 +9,13 @@ import com.mycompany.hotelverwaltung.persistence.*;
 import java.util.Calendar;
 
 /**
- *
- * @author Eddybrando
+ * JFrame used to add a customer.
+ * @author Eddybrando, Felix Brass
  */
 public class CustomersNew extends javax.swing.JFrame {
 
     private final PersistenceInterface pi;
+    
 
     /**
      * Creates new form CustomersNew
@@ -54,8 +55,8 @@ public class CustomersNew extends javax.swing.JFrame {
         cityTextField = new javax.swing.JTextField();
         countryLabel = new javax.swing.JLabel();
         countryTextField = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        exitButton = new javax.swing.JButton();
+        back = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Neue Kunde - B&V Hotels");
@@ -231,19 +232,19 @@ public class CustomersNew extends javax.swing.JFrame {
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
-        jButton2.setBackground(new java.awt.Color(187, 187, 187));
-        jButton2.setText("Beenden");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        exitButton.setBackground(new java.awt.Color(187, 187, 187));
+        exitButton.setText("Beenden");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                exitButtonActionPerformed(evt);
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(187, 187, 187));
-        jButton1.setText("« Abbrechen");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        back.setBackground(new java.awt.Color(187, 187, 187));
+        back.setText("« Abbrechen");
+        back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                backActionPerformed(evt);
             }
         });
 
@@ -256,9 +257,9 @@ public class CustomersNew extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(jButton1)
+                .addComponent(back)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(exitButton)
                 .addGap(34, 34, 34))
         );
         layout.setVerticalGroup(
@@ -267,8 +268,8 @@ public class CustomersNew extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(back)
+                    .addComponent(exitButton))
                 .addGap(0, 16, Short.MAX_VALUE))
         );
 
@@ -276,43 +277,43 @@ public class CustomersNew extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         dispose();
         CustomersManagement s = new CustomersManagement(pi);
         s.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_backActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_exitButtonActionPerformed
 
     private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
         if ("".equals(surnameTextField.getText())) {
-            String errorMessage = "Bitte Vorname eingeben.";
+            String errorMessage = BITTE__VORNAME_EINGEBEN;
             ErrorWindow s = new ErrorWindow(errorMessage);
             s.setVisible(true);
         } else if ("".equals(nameTextField.getText())) {
-            String errorMessage = "Bitte Nachname eingeben.";
+            String errorMessage = BITTE__NACHNAME_EINGEBEN;
             ErrorWindow s = new ErrorWindow(errorMessage);
             s.setVisible(true);
         } else if (birthdayDatePicker.getDate() == null) {
-            String errorMessage = "Bitte Geburtstag eingeben.";
+            String errorMessage = BITTE__GEBURTSTAG_EINGEBEN;
             ErrorWindow s = new ErrorWindow(errorMessage);
             s.setVisible(true);
         } else if ("".equals(streetTextField.getText())) {
-            String errorMessage = "Bitte Straße und Nummer eingeben.";
+            String errorMessage = BITTE__STRAßE_UND__NUMMER_EINGEBEN;
             ErrorWindow s = new ErrorWindow(errorMessage);
             s.setVisible(true);
         } else if ("".equals(zipTextField.getText())) {
-            String errorMessage = "Bitte Postleitzahl eingeben.";
+            String errorMessage = BITTE__POSTLEITZAHL_EINGEBEN;
             ErrorWindow s = new ErrorWindow(errorMessage);
             s.setVisible(true);
         } else if ("".equals(cityTextField.getText())) {
-            String errorMessage = "Bitte Stadt eingeben.";
+            String errorMessage = BITTE__STADT_EINGEBEN;
             ErrorWindow s = new ErrorWindow(errorMessage);
             s.setVisible(true);
         } else if ("".equals(countryTextField.getText())) {
-            String errorMessage = "Bitte Land eingeben.";
+            String errorMessage = BITTE__LAND_EINGEBEN;
             ErrorWindow s = new ErrorWindow(errorMessage);
             s.setVisible(true);
         } else {
@@ -335,6 +336,13 @@ public class CustomersNew extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_doneButtonActionPerformed
+    private static final String BITTE__STRAßE_UND__NUMMER_EINGEBEN = "Bitte Straße und Nummer eingeben.";
+    private static final String BITTE__POSTLEITZAHL_EINGEBEN = "Bitte Postleitzahl eingeben.";
+    private static final String BITTE__STADT_EINGEBEN = "Bitte Stadt eingeben.";
+    private static final String BITTE__LAND_EINGEBEN = "Bitte Land eingeben.";
+    private static final String BITTE__GEBURTSTAG_EINGEBEN = "Bitte Geburtstag eingeben.";
+    private static final String BITTE__NACHNAME_EINGEBEN = "Bitte Nachname eingeben.";
+    private static final String BITTE__VORNAME_EINGEBEN = "Bitte Vorname eingeben.";
 
     private void surnameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_surnameTextFieldActionPerformed
         // TODO add your handling code here:
@@ -386,6 +394,7 @@ public class CustomersNew extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back;
     private org.jdesktop.swingx.JXDatePicker birthdayDatePicker;
     private javax.swing.JLabel birthdayLabel;
     private javax.swing.JLabel cityLabel;
@@ -393,8 +402,7 @@ public class CustomersNew extends javax.swing.JFrame {
     private javax.swing.JLabel countryLabel;
     private javax.swing.JTextField countryTextField;
     private javax.swing.JButton doneButton;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton exitButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
