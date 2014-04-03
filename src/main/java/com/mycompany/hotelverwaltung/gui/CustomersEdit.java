@@ -50,6 +50,7 @@ public class CustomersEdit extends javax.swing.JFrame {
             data[customersList.indexOf(c)][5] = c.getZipcode();
             data[customersList.indexOf(c)][6] = c.getCity();
             data[customersList.indexOf(c)][7] = c.getCountry();
+            
         }
 
         initComponents();
@@ -240,6 +241,7 @@ public class CustomersEdit extends javax.swing.JFrame {
                 c.setCity((String) jTable1.getValueAt(currentRow, 6));
                 c.setCountry((String) jTable1.getValueAt(currentRow, 7));
                 pi.updateCustomer(c.getId(), c.getName(), c.getSurname(), c.getAdress(), c.getStreetnumber(), c.getZipcode(), c.getCity(), c.getCountry(), c.getBirthday());
+                currentRow++;
             } catch (ParseException ex) {
                 ErrorWindow s = new ErrorWindow(WRONG_CALENDAR_FORMAT);
             }

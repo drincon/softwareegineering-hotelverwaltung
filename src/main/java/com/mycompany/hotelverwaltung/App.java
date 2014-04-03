@@ -28,8 +28,8 @@ public class App {
         pi.addRoom("test", 1, SINGLEROOM);
 
         pi.addService("Dampfbad", 34);
-        pi.addService("Sauna", 59);
-        */
+        pi.addService("Sauna", 59);*/
+        
         
 
         StartWindow s = new StartWindow(pi);
