@@ -278,7 +278,9 @@ public class NewBookingServicesSelection extends javax.swing.JFrame {
                 servicesDates.add(cal1);
                 dispose();
                 NewBookingSuccess s;
-                s = new NewBookingSuccess(pi, checkIn, checkOut, room, customer, services, servicesDates);
+                List<Room> rooms=new ArrayList<Room>();
+                rooms.add(room);
+                s = new NewBookingSuccess(pi, checkIn, checkOut, rooms, customer, services, servicesDates);
                 s.setVisible(true);
                 
             }

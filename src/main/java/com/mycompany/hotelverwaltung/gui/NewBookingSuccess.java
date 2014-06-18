@@ -26,7 +26,7 @@ public class NewBookingSuccess extends javax.swing.JFrame {
     private final PersistenceInterface pi;
     private final Calendar checkIn;
     private final Calendar checkOut;
-    private final Room room;
+    private final List<Room> room;
     private final Customer customer;
     private final List<Service> services;
     private final List<Calendar> servicesDates;
@@ -43,7 +43,7 @@ public class NewBookingSuccess extends javax.swing.JFrame {
      *
      */
 
-    public NewBookingSuccess(PersistenceInterface pi, Calendar checkIn, Calendar checkOut, Room room, Customer customer, List<Service> services, List<Calendar> servicesDates)  {
+    public NewBookingSuccess(PersistenceInterface pi, Calendar checkIn, Calendar checkOut, List<Room> room, Customer customer, List<Service> services, List<Calendar> servicesDates)  {
         this.pi = pi;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
@@ -57,7 +57,10 @@ public class NewBookingSuccess extends javax.swing.JFrame {
         SimpleDateFormat format1 = new SimpleDateFormat(DD_M_MYYYY);
         CheckOutDate.setText(format1.format(checkOut.getTime()));
         Land.setText(customer.getCountry());
-        RoomNumber.setText(Integer.toString(room.getRoomNumber()));
+        Iterator<Room> itRoom= room.iterator();
+        while(itRoom.hasNext()){
+            RoomNumber.setText(Integer.toString(itRoom.next().getRoomNumber()));
+        }
         Iterator<Service> it = services.iterator();
         String s = "";
 
@@ -69,9 +72,13 @@ public class NewBookingSuccess extends javax.swing.JFrame {
         Street.setText(customer.getStreetnumber());
         ZipcodeCity.setText(customer.getZipcode());
         checkInDate.setText(format1.format(checkIn.getTime()));
-        Double d = null;
+        Double d = 0.0;
         try {
-            d = pi.calculatePrice(checkIn, checkOut, room.getRoomType(), services);
+            itRoom = room.iterator();
+            while(itRoom.hasNext()){
+                Double d2=pi.calculatePrice(checkIn, checkOut, itRoom.next().getRoomType(), services);
+                d=d+d2;
+            }
         } catch (DepartureIsBeforeArrivalException ex) {
            // Exception was thrown by this method to because i was wrong about the application flow.
             System.out.println(ex.getStackTrace());
@@ -305,7 +312,7 @@ public class NewBookingSuccess extends javax.swing.JFrame {
 
     private void bookNowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookNowActionPerformed
         dispose();
-        Random random = new Random(customer.getId() + room.getId() + checkIn.getTimeInMillis() + checkOut.getTimeInMillis());
+        Random random = new Random(customer.getId() + checkIn.getTimeInMillis() + checkOut.getTimeInMillis());
         int i = random.nextInt();
         if (i <= 0) {
             i = i * -1;

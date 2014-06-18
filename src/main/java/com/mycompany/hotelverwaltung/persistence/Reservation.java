@@ -45,11 +45,14 @@ public class Reservation implements Serializable {
     @JoinColumn(name = "customer_fk")
     private Customer customer;
 
-    @ManyToOne
-    private Room room;
+    @ManyToMany
+    private List<Room> room;
 
     @ManyToMany
     private List<Service> services;
+
+   // @ManyToMany
+   // private List<Calendar> serviceDates;
 
     private String[] servicesDates;
 
@@ -60,6 +63,7 @@ public class Reservation implements Serializable {
     private Calendar departure;
 
     private static final String EE_MMM_DD_H_HMMSS_Z_YYYY = "EE MMM dd HH:mm:ss z yyyy";
+
     public Reservation() {
 
     }
@@ -76,7 +80,7 @@ public class Reservation implements Serializable {
      * @param servicesDates
      * @throws DepartureIsBeforeArrivalException
      */
-    public Reservation(int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services, List<Calendar> servicesDates) throws DepartureIsBeforeArrivalException {
+    public Reservation(int reservationNumber, Customer c, List<Room> r, Calendar arrival, Calendar departure, List<Service> services, List<Calendar> servicesDates) throws DepartureIsBeforeArrivalException {
         this.reservationNumber = reservationNumber;
         this.customer = c;
         this.room = r;
@@ -113,11 +117,11 @@ public class Reservation implements Serializable {
         this.customer = customer;
     }
 
-    public Room getRoom() {
+    public List<Room> getRoom() {
         return room;
     }
 
-    public void setRoom(Room room) {
+    public void setRoom(List<Room> room) {
         this.room = room;
     }
 
@@ -131,21 +135,20 @@ public class Reservation implements Serializable {
 
     public List<Calendar> getServicesDates() throws ParseException {
         List<Calendar> list = new ArrayList<Calendar>();
-        SimpleDateFormat format1 = new SimpleDateFormat(EE_MMM_DD_H_HMMSS_Z_YYYY,Locale.ENGLISH);
+        HotelSimpleDateFormatter hotelSimpleDateFormatter= new HotelSimpleDateFormatter();
         for (String servicesDate : servicesDates) {
             Calendar cal = Calendar.getInstance();
-            cal.setTime(format1.parse(servicesDate));
+            cal.setTime(hotelSimpleDateFormatter.parse(servicesDate));
             list.add(cal);
         }
         return list;
     }
-    
 
     public void setServicesDates(List<Calendar> servicesDates) {
         this.servicesDates = new String[servicesDates.size()];
-        SimpleDateFormat format1 = new SimpleDateFormat(EE_MMM_DD_H_HMMSS_Z_YYYY,Locale.ENGLISH);
+        HotelSimpleDateFormatter hotelSimpleDateFormatter= new HotelSimpleDateFormatter();
         for (int i = 0; i < servicesDates.size(); i++) {
-            this.servicesDates[i] = format1.format(servicesDates.get(i).getTime());
+            this.servicesDates[i] = hotelSimpleDateFormatter.format(servicesDates.get(i).getTime());
         }
     }
 

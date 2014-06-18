@@ -7,6 +7,7 @@ package com.mycompany.hotelverwaltung.gui;
 
 import com.mycompany.hotelverwaltung.persistence.PersistenceInterface;
 import com.mycompany.hotelverwaltung.persistence.Reservation;
+import com.mycompany.hotelverwaltung.persistence.Room;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
@@ -41,7 +42,12 @@ public class BookingsList extends javax.swing.JFrame {
             data[reservationsList.indexOf(reservationNumber)][1] = reservationNumber.getCustomer().getName();
             data[reservationsList.indexOf(reservationNumber)][2] = format1.format(reservationNumber.getArrival().getTime());
             data[reservationsList.indexOf(reservationNumber)][3] = format1.format(reservationNumber.getDeparture().getTime());
-            data[reservationsList.indexOf(reservationNumber)][4] = reservationNumber.getRoom().getRoomNumber();
+            String s="";
+            Iterator<Room> itRoom=reservationNumber.getRoom().iterator();
+            while(itRoom.hasNext()){
+                s=s+itRoom.next().getRoomNumber();
+            }
+            data[reservationsList.indexOf(reservationNumber)][4] = s;
             data[reservationsList.indexOf(reservationNumber)][5] = reservationNumber.getServices().get(0).getName();
             data[reservationsList.indexOf(reservationNumber)][6] = format1.format(reservationNumber.getServicesDates().get(0).getTime());
         }

@@ -38,6 +38,7 @@ public class RoomManagerTest extends TestCase {
     private static final String PERSISTENCE_UNIT_NAME = "com.mycompany_Hotelverwaltung_jar_1.0-SNAPSHOTPU";
     private Customer c;
     private Room r;
+    private List<Room> rooms;
     private Service s;
     private Reservation re;
 
@@ -57,6 +58,9 @@ public class RoomManagerTest extends TestCase {
 
         this.r = new Room("TestRoom", 1, RoomType.DOUBLEROOM);
         persistObject(r);
+      
+        this.rooms = new ArrayList<Room>();
+        rooms.add(r);
 
         this.s = new Service("Testdienstleistung", 50);
         persistObject(s);
@@ -70,7 +74,7 @@ public class RoomManagerTest extends TestCase {
         List<Calendar> callist = new ArrayList<Calendar>();
         callist.add(arrival);
 
-        this.re = new Reservation(1, c, r, arrival, departure, list, callist);
+        this.re = new Reservation(1, c, rooms, arrival, departure, list, callist);
         persistObject(re);
 
     }
@@ -135,7 +139,7 @@ public class RoomManagerTest extends TestCase {
             Calendar arrival = Calendar.getInstance();
             arrival.set(2000, Calendar.JANUARY, 16);
 
-            rm.addReservation(400, c, r, arrival, departuretest, null, null);
+            rm.addReservation(400, c, rooms, arrival, departuretest, null, null);
 
         } catch (DepartureIsBeforeArrivalException e) {
             b = true;
@@ -160,7 +164,7 @@ public class RoomManagerTest extends TestCase {
             serviceDate.set(2000, Calendar.FEBRUARY, 1);
             callist.add(serviceDate);
 
-            rm.addReservation(500, c, r, arrival, departure, list, callist);
+            rm.addReservation(500, c, rooms, arrival, departure, list, callist);
         } catch (ServiceDateIsNotDuringStayException e) {
             b = true;
         }
@@ -257,6 +261,9 @@ public class RoomManagerTest extends TestCase {
 
         Room r2 = new Room("TestRoom 2", 1, RoomType.DOUBLEROOM);
         persistObject(r2);
+        
+        List<Room> rooms2 = new ArrayList<Room>();
+        rooms.add(r2);
 
         Service s2 = new Service("Testdienstleistung 2", 50);
         persistObject(s2);
@@ -269,7 +276,7 @@ public class RoomManagerTest extends TestCase {
         dateForService.set(2000, Calendar.JANUARY, 11);
         servicesDate.add(dateForService);
 
-        rm.addReservation(1, c2, r2, arrival, departure, list, servicesDate);
+        rm.addReservation(1, c2, rooms, arrival, departure, list, servicesDate);
         Reservation tmp = null;
         Iterator<Reservation> it = rm.getReservationList().iterator();
         boolean check = false;

@@ -118,26 +118,30 @@ public class RoomManager implements PersistenceInterface {
     @Override
     public List<Room> checkAvailability(Calendar checkInDate, Calendar checkOutDate, RoomType roomtype) throws DepartureIsBeforeArrivalException {
         List<Reservation> reservations = getReservationList();
-        Iterator<Reservation> it = reservations.iterator();
+        Iterator<Reservation> itReservation = reservations.iterator();
         List<Room> rooms = new ArrayList<Room>();
         if (checkOutDate.before(checkInDate)) {
             throw new DepartureIsBeforeArrivalException();
         }
 
-        while (it.hasNext()) {
-            Reservation r = it.next();
-            if (r.getRoom().getRoomType() == roomtype) {
-                if (r.getDeparture().equals(checkInDate)) {
-                    Iterator it2 = reservations.iterator();
-                    while (it2.hasNext()) {
-                        Reservation r2 = it.next();
-                        if (r.getRoom().equals(r2.getRoom()) && dateIsNotInTimeframe(checkInDate, checkOutDate, r2.getArrival())) {
-                            addRoomToList(rooms, r.getRoom());
+        while (itReservation.hasNext()) {
+            Reservation r = itReservation.next();
+            Iterator<Room> itRoom = r.getRoom().iterator();
+            while (itRoom.hasNext()) {
+                Room room = itRoom.next();
+                if (room.getRoomType() == roomtype) {
+                    if (r.getDeparture().equals(checkInDate)) {
+                        Iterator it2 = reservations.iterator();
+                        while (it2.hasNext()) {
+                            Reservation r2 = itReservation.next();
+                            if (r.getRoom().equals(r2.getRoom()) && dateIsNotInTimeframe(checkInDate, checkOutDate, r2.getArrival())) {
+                                addRoomToList(rooms, room);
+                            }
                         }
                     }
-                }
-                if (dateIsNotInTimeframe(checkInDate, checkOutDate, r.getDeparture()) && dateIsNotInTimeframe(checkInDate, checkOutDate, r.getArrival())) {
-                    addRoomToList(rooms, r.getRoom());
+                    if (dateIsNotInTimeframe(checkInDate, checkOutDate, r.getDeparture()) && dateIsNotInTimeframe(checkInDate, checkOutDate, r.getArrival())) {
+                        addRoomToList(rooms, room);
+                    }
                 }
             }
         }
@@ -147,10 +151,10 @@ public class RoomManager implements PersistenceInterface {
         while (itroom.hasNext()) {
             Room r = itroom.next();
             if (r.getRoomType() == roomtype) {
-                it = reservations.iterator();
+                itReservation = reservations.iterator();
                 boolean check = true;
-                while (it.hasNext()) {
-                    Reservation re = it.next();
+                while (itReservation.hasNext()) {
+                    Reservation re = itReservation.next();
                     if (re.getRoom().equals(r)) {
                         check = false;
                         if (!dateIsNotInTimeframe(checkInDate, checkOutDate, re.getArrival()) || !dateIsNotInTimeframe(checkInDate, checkOutDate, re.getDeparture())) {
@@ -181,7 +185,7 @@ public class RoomManager implements PersistenceInterface {
      * com.mycompany.hotelverwaltung.exceptions.ServiceDateIsNotDuringStayException
      */
     @Override
-    public void addReservation(int reservationNumber, Customer c, Room r, Calendar arrival, Calendar departure, List<Service> services, List<Calendar> servicesDates) throws DepartureIsBeforeArrivalException, ServiceDateIsNotDuringStayException {
+    public void addReservation(int reservationNumber, Customer c, List<Room> r, Calendar arrival, Calendar departure, List<Service> services, List<Calendar> servicesDates) throws DepartureIsBeforeArrivalException, ServiceDateIsNotDuringStayException {
         em.getTransaction().begin();
         try {
             if (servicesDates == null) {
@@ -286,11 +290,11 @@ public class RoomManager implements PersistenceInterface {
     //untested
     public void removeCustomer(int id) {
         em.getTransaction().begin();
-        Customer cus=em.find(Customer.class, id);
-        Collection<Reservation> res=cus.getReservations();
-        Iterator<Reservation> it=res.iterator();
-        while(it.hasNext()){
-            Reservation res1=it.next();
+        Customer cus = em.find(Customer.class, id);
+        Collection<Reservation> res = cus.getReservations();
+        Iterator<Reservation> it = res.iterator();
+        while (it.hasNext()) {
+            Reservation res1 = it.next();
             em.find(Reservation.class, res1.getId());
             res1.setCustomer(null);
             em.remove(res1);
@@ -391,22 +395,22 @@ public class RoomManager implements PersistenceInterface {
      */
     @Override
     public boolean dateIsNotInTimeframe(Calendar begin, Calendar end, Calendar date) {
-        long l1= begin.getTimeInMillis();
-        long endl= end.getTimeInMillis();
-        long datel= date.getTimeInMillis();
-        if(datel<l1){
+        long l1 = begin.getTimeInMillis();
+        long endl = end.getTimeInMillis();
+        long datel = date.getTimeInMillis();
+        if (datel < l1) {
             return true;
         }
-        if(datel>endl){
+        if (datel > endl) {
             return true;
         }
-        
-        if( l1==datel){
+
+        if (l1 == datel) {
             return false;
         }
-        if(endl==datel){
+        if (endl == datel) {
             return false;
-        } else{
+        } else {
             return false;
         }
     }

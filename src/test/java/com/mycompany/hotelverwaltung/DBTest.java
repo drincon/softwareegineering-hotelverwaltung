@@ -31,6 +31,7 @@ public class DBTest extends TestCase {
     private static final String PERSISTENCE_UNIT_NAME = "com.mycompany_Hotelverwaltung_jar_1.0-SNAPSHOTPU";
     private Customer c;
     private Room r;
+    private List<Room> rooms;
     private Service s;
 
     public DBTest(String testName) {
@@ -49,6 +50,9 @@ public class DBTest extends TestCase {
 
         this.r = new Room("TestRoom", 1, RoomType.DOUBLEROOM);
         persistObject(r);
+        
+        this.rooms = new ArrayList<Room>();
+        rooms.add(r);
 
         this.s = new Service("Testdienstleistung", 50);
         persistObject(s);
@@ -80,7 +84,7 @@ public class DBTest extends TestCase {
         services.add(s);
         List<Calendar> servicesDate= new ArrayList<Calendar>();
                 
-        Reservation res = new Reservation(123, c, r, arrival, departure, services,servicesDate);
+        Reservation res = new Reservation(123, c, rooms, arrival, departure, services,servicesDate);
         em.persist(res);
         em.getTransaction().commit();
 
